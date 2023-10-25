@@ -1,0 +1,1 @@
+{"uuid":"eb7165ee-3dbe-49a5-8278-a949597a940c","name":"Smoke Suite for Vadim Pim Drim","children":["cd0b50b0-fb42-494d-bcb0-e1ff8983d200"],"befores":[{"name":"setupConfig","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1698156211377,"stop":1698156211385}],"afters":[],"start":1698156211366,"stop":1698156243259}
