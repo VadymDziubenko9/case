@@ -22,13 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static page.object.portal.cases.CaseDuplicationPage.getExpectedMediaList;
 import static page.object.portal.models.Document.getDocumentsListOfTitles;
 import static page.object.portal.models.Document.getExpectedDocumentsList;
+import static utils.Config.*;
 import static utils.DateTimeUtil.DATE_PATTERN_8;
 import static utils.DateTimeUtil.DATE_PATTERN_9;
 import static widgets.TagWidget.*;
 
 @Listeners({AttachmentListener.class})
 @Slf4j
-public class SmokeTests extends BaseTest {
+public class SmokeTests extends BaseTest { //todo gradle test how to run with params
     private static final String COPIED_CASE_NAME = "Copy of John Smith";
     private static final int START_FROM_INDEX = 5;
     private final HomePage homePage = new HomePage();
@@ -56,7 +57,7 @@ public class SmokeTests extends BaseTest {
     }
 
     @AfterGroups(description = "Delete episode", groups = "smoke", alwaysRun = true)
-    public void EpisodeCleanUp() {
+    public void episodeCleanUp() {
         homePage
                 .openHomePage()
                 .openCase(COPIED_CASE_NAME)
@@ -68,13 +69,17 @@ public class SmokeTests extends BaseTest {
     @Test(description = "Login user", groups = "smoke")
     @Description("Test Description: Login test")
     public void login() {
-        loginPage.login("vadymdziubenko99+otto@gmail.com", "Ps@!2009");
-        assertThat(loginPage.verifyLoggedInUserName())
-                .as("Wrong username is displaying after logged in")
-                .isEqualTo("Otto von Bismarck");
-        assertThat(loginPage.getCurrentUrl())
-                .as("Wrong url is displaying after logged in")
-                .isEqualTo(homePage.getPageUrl());
+        loginPage.login(USER_NAME, USER_PASSWORD);
+
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(loginPage.verifyLoggedInUserName())
+                    .as("Wrong username is displaying after logged in")
+                    .isEqualTo("Otto von Bismarck");
+
+            softAssertions.assertThat(loginPage.getCurrentUrl())
+                    .as("Wrong url is displaying after logged in")
+                    .isEqualTo(BASE_URL + "/admin/cases");
+        });
     }
 
     @Test(description = "Duplication of an existing case scenario")

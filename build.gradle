@@ -33,6 +33,15 @@ repositories {
     mavenCentral()
 }
 
+clean.doFirst {
+    def buildDir = "${rootDir}\\selenideFolder"
+    def allureDir = "${rootDir}\\build\\allure-results"
+    delete "$buildDir"
+    delete "$allureDir"
+    println "Clean Output directory for project ${project.name}"
+    println "Clean Allure results directory for project ${project.name}"
+}
+
 tasks.withType(Test).tap {
     configureEach {
         testLogging {

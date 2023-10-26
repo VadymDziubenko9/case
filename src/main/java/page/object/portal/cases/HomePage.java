@@ -15,12 +15,11 @@ import java.util.stream.IntStream;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static enums.ProcessingStatus.READY;
+import static utils.Config.BASE_URL;
 import static utils.ConfirmUtil.*;
 
 @Slf4j
 public class HomePage {
-    private static final String HOME_URL = "https://cases-qa.casechronology.com/admin/cases";
-
     private static final String ACTION_BUTTON = "//button[@data-action-button='%s']";
     private static final String SCROLL_TO_PARAMETER = "{block: \"center\", inline: \"start\"}";
     private static final String SELECTED_CASE_TAB_LOC = "//a[contains(@href,'%s') and @aria-selected='true']";
@@ -74,7 +73,7 @@ public class HomePage {
 
     @Step("Open home page")
     public HomePage openHomePage() {
-        open(HOME_URL);
+        open(BASE_URL);
         userAvatarLocator.shouldBe(visible);
         return this;
     }
@@ -288,9 +287,4 @@ public class HomePage {
     public int getNumOfPagesInWorkspace(){
         return Integer.parseInt(totalNumberOfPagesInWorkspace.getText());
     }
-
-    public String getPageUrl(){
-        return HOME_URL;
-    }
-
 }

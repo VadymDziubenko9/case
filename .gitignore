@@ -21,7 +21,7 @@ target/
 .gradle
 
 # JetBrains IDE
-.idea/
+.idea/*
 
 # Unit test reports
 TEST*.xml
@@ -49,14 +49,8 @@ Thumbs.db
 *.png
 *.html
 
-# TestNG reports
-project-config/Reports/
-rest-api-autotests/Reports/
-ui-autotests/Reports/
-testrail-integration/Reports/
-
 # Allure reports
-todo***/build/
+build/*
 
 # Selenide folder
-todo***/selenideFolder
+selenideFolder/*
