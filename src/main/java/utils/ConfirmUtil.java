@@ -3,7 +3,6 @@ package utils;
 import com.codeborne.selenide.SelenideElement;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.Keys;
 
 import java.util.Objects;
@@ -52,7 +51,7 @@ public class ConfirmUtil {
         $x(CONFIRMATION_DIALOG.formatted(message) + "//button[normalize-space()='Confirm']").shouldBe(visible).click();
     }
 
-    public static void clearInput(@NotNull SelenideElement locator) {
+    public static void clearInput(SelenideElement locator) {
         while (!Objects.requireNonNull(locator.getAttribute("value")).isEmpty()) {
             actions().sendKeys(locator, Keys.BACK_SPACE).build().perform();
         }

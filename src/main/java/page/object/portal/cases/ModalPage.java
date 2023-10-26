@@ -3,7 +3,6 @@ package page.object.portal.cases;
 import com.codeborne.selenide.SelenideElement;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import page.object.portal.models.Episode;
 
 import static com.codeborne.selenide.Condition.*;
@@ -57,7 +56,7 @@ public class ModalPage {
         return this;
     }
 
-    public ModalPage fillInEpisodeForm(@NotNull Episode episode) {
+    public ModalPage fillInEpisodeForm(Episode episode) {
         episodeAuthor(episode);
         episodeType(episode);
         episodeDate(episode);
@@ -67,22 +66,22 @@ public class ModalPage {
         return this;
     }
 
-    private void episodeTime(@NotNull Episode episode) {
+    private void episodeTime(Episode episode) {
         clearInput(episodeAuthorInput);
         episodeTimeInput.shouldBe(exist).sendKeys(episode.getTime());
     }
 
-    private void episodeDate(@NotNull Episode episode) {
+    private void episodeDate(Episode episode) {
         clearInput(episodeAuthorInput);
         episodeDateInput.shouldBe(exist).sendKeys(episode.getDate());
     }
 
-    private void episodeType(@NotNull Episode episode) {
+    private void episodeType(Episode episode) {
         clearInput(episodeAuthorInput);
         episodeTypeInput.shouldBe(exist).sendKeys(episode.getType());
     }
 
-    private void episodeAuthor(@NotNull Episode episode) {
+    private void episodeAuthor(Episode episode) {
         clearInput(episodeAuthorInput);
         episodeAuthorInput.shouldBe(exist).sendKeys(episode.getAuthor());
     }
