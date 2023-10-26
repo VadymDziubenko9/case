@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,10 +30,9 @@ public class DateTimeUtil {
     public static final String DATE_PATTERN_8 = "MM/dd/yyyy";
     public static final String DATE_PATTERN_6 = "dd/MM/yyyy HH:mm";
     public static final String DATE_PATTERN_7 = "dd/MM/yy HH:mm";
-    public static final String DATE_PATTERN_9 = "HH:mm a";
+    public static final String DATE_PATTERN_9 = "hh:mm a";
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN_1, Locale.ENGLISH);
     private final SimpleDateFormat simpleDateFormat_2 = new SimpleDateFormat(DATE_PATTERN_4, Locale.ENGLISH);
-    private final DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(Locale.ENGLISH);
 
     static {
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -52,7 +50,12 @@ public class DateTimeUtil {
 
     public static @NonNull String todayTimeInFormat(@NonNull String format) {
         var dateTimeFormatter = ofPattern(format);
-        return LocalTime.now().format(dateTimeFormatter);
+        return LocalTime.now().format(dateTimeFormatter).toLowerCase();
+    }
+
+    public static @NonNull String timeInFormatPlus5(@NonNull String format) {
+        var dateTimeFormatter = ofPattern(format);
+        return LocalTime.now().plusHours(5).format(dateTimeFormatter).toLowerCase();
     }
 
     public static @NonNull String tomorrowInFormat(@NonNull String format) {

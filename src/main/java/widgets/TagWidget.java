@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$x;
-import static utils.ConfirmationsUtil.*;
+import static utils.ConfirmUtil.*;
 
 @Slf4j
 @UtilityClass

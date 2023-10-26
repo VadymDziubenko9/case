@@ -10,24 +10,25 @@ import page.object.portal.models.Document;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static enums.ProcessingStatus.READY;
-import static utils.ConfirmationsUtil.*;
+import static utils.ConfirmUtil.*;
 
 @Slf4j
 public class HomePage {
-    public static final String HOME_URL = "https://cases-qa.casechronology.com/admin/cases";
+    private static final String HOME_URL = "https://cases-qa.casechronology.com/admin/cases";
 
+    private static final String ACTION_BUTTON = "//button[@data-action-button='%s']";
     private static final String SCROLL_TO_PARAMETER = "{block: \"center\", inline: \"start\"}";
     private static final String SELECTED_CASE_TAB_LOC = "//a[contains(@href,'%s') and @aria-selected='true']";
     private static final String PAGE_LOC_BY_NUMBER = "//div[contains(@class,'card-page-wrapper')]/div[@data-document-page-number='%d']";
     private static final String ADD_PARTICULAR_PAGE_TO_STAPLE = "//button[.//i[contains(@class,'icon-add')]]";
     private static final String PARTICULAR_PAGE_IN_STAPLE = "//button[.//i[contains(@class,'icon-done')]]";
     private static final String CLOSE_PAGE_CARD_PREVIEW_BUTTON = ".//button[.//*[@data-testid='CloseIcon']]";
+
     private final SelenideElement searchInput = $x("//div[@data-control-input='search']//input");
     private final SelenideElement caseContextMenuButton = $x("//button[contains(@data-action-button,'caseDropdown')]");
     private final SelenideElement caseContextMenuList = $x("//ul[contains(@class,'MuiList-root') and @role='menu']");
@@ -37,13 +38,15 @@ public class HomePage {
     private final SelenideElement documentElementContainer = $x("//li[contains(@class,'MuiListItem-container')]");
     private final SelenideElement documentSearchInput = $x("//div[@data-control-input='search']//input");
     private final SelenideElement noPagesInToWorkspaceLoc = $x("//p[text()='No page(s) in workspace']");
-    private final SelenideElement removePageFromWorkspaceBtn = $x("//button[@data-action-button='removePageFromWorkspace']");
     private final SelenideElement stapleBtn = $x("//button[@data-action-fab='createStaple']");
     private final SelenideElement saveStapleBtn = $x("//button[@data-action-fab='saveStaple']");
-    private final SelenideElement deleteStapleButton = $x("//button[@data-action-button='deleteStaple']");
-    private final SelenideElement editStapleButton = $x("//button[@data-action-button='editStaple']");
+    private final SelenideElement deleteStapleButton = $x(ACTION_BUTTON.formatted("deleteStaple"));
+    private final SelenideElement editStapleButton = $x(ACTION_BUTTON.formatted("editStaple"));
     private final SelenideElement pagesInStapleTooltipLoc = $x("//div[@data-popper-placement='bottom']");
     private final SelenideElement pageCardPreviewLoc = $x("//div[contains(@class,'card-page-preview')]");
+    private final SelenideElement addPageToWorkspaceBtn = $x(ACTION_BUTTON.formatted("addPageToWorkspace"));
+    private final SelenideElement removePageFromWorkspaceBtn = $x(ACTION_BUTTON.formatted("removePageFromWorkspace"));
+    private final SelenideElement totalNumberOfPagesInWorkspace = $x("//div[contains(@class,'MuiToolbar-regular') and .//*[contains(text(),'Total number of pages: ')]]");
 
     private final ElementsCollection caseDocumentsTitles = $$x("//ul[contains(@class,'MuiList-root')]//*[contains(@data-scroll-id,'document')]");
     private final ElementsCollection documentsList = $$x("//ul[contains(@class,'MuiList-root')]/li");
@@ -140,12 +143,6 @@ public class HomePage {
         pageCardsLoc.shouldHave(CollectionCondition.sizeGreaterThan(0));
         waitUntilPageCardIsLoading();
         return this;
-    }
-
-    private void clearInput(SelenideElement locator) {
-        while (!Objects.requireNonNull(locator.getAttribute("value")).isEmpty()) {
-            actions().sendKeys(locator, Keys.BACK_SPACE).build().perform();
-        }
     }
 
     private void searchDocument(String title) {
@@ -255,7 +252,7 @@ public class HomePage {
         log.info("Deleting staple");
         scrollToParticularPage(mainPage);
         deleteStapleButton.shouldBe(exist).click();
-        confirmAction();
+        confirmAction("Delete staple from pages");
         waitTillBubbleMessagesShown("Staple was removed", "Staple was updated");
         closeAllBubbles();
         return this;
@@ -278,5 +275,22 @@ public class HomePage {
         refresh();
     }
 
+    public HomePage addPageToWorkspace(int numbers) {
+        IntStream.range(1, numbers).boxed().forEach(page -> {
+            scrollToParticularPage(page);
+            $x(PAGE_LOC_BY_NUMBER.formatted(page) + ACTION_BUTTON.formatted("addPageToWorkspace")).shouldBe(visible).click();
+            waitTillBubbleMessageShown("Page was added to workspace");
+            closeAllBubbles();
+        });
+        return this;
+    }
+
+    public int getNumOfPagesInWorkspace(){
+        return Integer.parseInt(totalNumberOfPagesInWorkspace.getText());
+    }
+
+    public String getPageUrl(){
+        return HOME_URL;
+    }
 
 }

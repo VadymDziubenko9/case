@@ -41,7 +41,7 @@ public class WebDriverManager {
         Configuration.baseUrl = "https://cases-qa.casechronology.com";
         Configuration.browserSize = "1920x1080";
         Configuration.fastSetValue = false;
-        Configuration.timeout = 5_000;
+        Configuration.timeout = 8_000;
         Configuration.headless = false;
         Configuration.downloadsFolder = "selenideFolder";
         Configuration.fileDownload = FOLDER;
