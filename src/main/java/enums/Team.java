@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public enum Team {
+
     QA_TEAM("QA Team", "This team is for testing purpose", List.of("Otto von Bismarck"));
 
     private final String name;

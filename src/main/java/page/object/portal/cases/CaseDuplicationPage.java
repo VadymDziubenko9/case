@@ -1,6 +1,7 @@
 package page.object.portal.cases;
 
 import com.codeborne.selenide.SelenideElement;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
@@ -28,7 +29,7 @@ public class CaseDuplicationPage {
     private final SelenideElement caseDuplicateDialog = $x("//form[contains(@role,'dialog') and .//text()='Create case duplicate']");
 
 
-    private void selectElements(List<String> documents, SelenideElement element) {
+    private void selectElements(@NonNull List<String> documents, SelenideElement element) {
         IntStream.range(0, documents.size()).boxed().forEach(index -> {
             element.$x(OPEN_BTN).shouldBe(enabled).click();
             listOfValues.should(exist);
@@ -64,7 +65,7 @@ public class CaseDuplicationPage {
         return this;
     }
 
-    private List<String> getDropDownElements(SelenideElement locator) {
+    private @NonNull List<String> getDropDownElements(@NonNull SelenideElement locator) {
         locator.$x(OPEN_BTN).shouldBe(visible).click();
         var result = listOfValues.$$x(".//li").texts();
         locator.$x(CLOSE_BTN).shouldBe(visible).click();

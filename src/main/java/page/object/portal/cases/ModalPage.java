@@ -2,12 +2,13 @@ package page.object.portal.cases;
 
 import com.codeborne.selenide.SelenideElement;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.Keys;
 import page.object.portal.models.Episode;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.refresh;
+import static com.codeborne.selenide.Selenide.*;
 import static utils.ConfirmUtil.*;
 
 @AllArgsConstructor
@@ -21,6 +22,7 @@ public class ModalPage {
     private final SelenideElement episodeTypeInput = $x(CONTROL_INPUT.formatted("input"));
     private final SelenideElement episodeDateInput = $x(CONTROL_INPUT.formatted("date"));
     private final SelenideElement episodeTimeInput = $x(CONTROL_INPUT.formatted("time"));
+    private final SelenideElement episodeNotesInput = $x("//div[contains(@class,'ql-editor') and @data-placeholder='Notes']");
     private final SelenideElement markEpisodeAsNotParentBtn = $x(ACTION_BUTTON.formatted("markEpisodeAsNotParent)"));
     private final SelenideElement markEpisodeAsParentBtn = $x(ACTION_BUTTON.formatted("markEpisodeAsParent)"));
     private final SelenideElement deleteEpisodeBtn = $x(ACTION_BUTTON.formatted("deleteEpisode"));
@@ -31,6 +33,7 @@ public class ModalPage {
     private final SelenideElement createEpisodeButton = $x("//button[@data-action-button='createEpisode']");
     private final SelenideElement closeModalViewLoc = $x("//h2[contains(@class,'MuiTypography-root')]//button[@aria-label='Close dialog button']");
     private final SelenideElement createEpisodeBtn = $x("//button[@data-action-button='createEpisodeFormDialog']");
+    private final SelenideElement saveEpisodeBtn = $x("//button[@data-action-button='saveEpisodeForm']");
     private final SelenideElement saveEpisodeOnEditButton = $x("//button[@data-action-button='saveEpisodeForm']");
     private final SelenideElement modalViewContainerLoc = $x("//div[contains(@class,'MuiDialogContent-root')]");
 
@@ -39,10 +42,11 @@ public class ModalPage {
         return this;
     }
 
-    public void closeModalView() {
+    public ModalPage closeModalView() {
         if (closeModalViewLoc.isDisplayed()) {
             closeModalViewLoc.shouldBe(enabled).click();
         }
+        return this;
     }
 
     public void refreshPage() {
@@ -66,30 +70,50 @@ public class ModalPage {
         return this;
     }
 
-    private void episodeTime(Episode episode) {
-        clearInput(episodeAuthorInput);
+    private void episodeTime(@NonNull Episode episode) {
+        clearInput(episodeTimeInput);
         episodeTimeInput.shouldBe(exist).sendKeys(episode.getTime());
     }
 
-    private void episodeDate(Episode episode) {
-        clearInput(episodeAuthorInput);
+    private void episodeDate(@NonNull Episode episode) {
+        clearInput(episodeDateInput);
         episodeDateInput.shouldBe(exist).sendKeys(episode.getDate());
     }
 
-    private void episodeType(Episode episode) {
-        clearInput(episodeAuthorInput);
+    private void episodeType(@NonNull Episode episode) {
+        clearInput(episodeTypeInput);
         episodeTypeInput.shouldBe(exist).sendKeys(episode.getType());
     }
 
-    private void episodeAuthor(Episode episode) {
+    private void episodeAuthor(@NonNull Episode episode) {
         clearInput(episodeAuthorInput);
         episodeAuthorInput.shouldBe(exist).sendKeys(episode.getAuthor());
     }
 
-    public void submit() {
+    public ModalPage episodeNotes(Episode episode){
+        clearNotesInput();
+        episodeNotesInput.shouldBe(enabled).sendKeys(episode.getNotes());
+        return this;
+    }
+
+    private void clearNotesInput(){
+        while (!episodeNotesInput.$x(".//p").getText().isEmpty()){
+            actions().sendKeys(episodeNotesInput, Keys.BACK_SPACE).build().perform();
+        }
+
+    }
+    public ModalPage submit() {
         createEpisodeBtn.shouldBe(enabled).click();
         waitTillBubbleMessagesShown("Episode was created", "Episode was updated");
         closeAllBubbles();
+        return this;
+    }
+
+    public ModalPage saveEpisodeOnEdit() {
+        saveEpisodeBtn.shouldBe(enabled).click();
+        waitTillBubbleMessagesShown("Episode was created", "Episode was updated");
+        closeAllBubbles();
+        return this;
     }
 
     public Episode parseEpisode() {
@@ -99,6 +123,7 @@ public class ModalPage {
                 .type(episodeTypeInput.getAttribute(attribute))
                 .date(episodeDateInput.getAttribute(attribute))
                 .time(episodeTimeInput.getAttribute(attribute))
+                .notes(episodeNotesInput.getText())
                 .build();
     }
 

@@ -4,6 +4,7 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.Keys;
 import page.object.portal.models.Document;
@@ -27,7 +28,11 @@ public class HomePage {
     private static final String ADD_PARTICULAR_PAGE_TO_STAPLE = "//button[.//i[contains(@class,'icon-add')]]";
     private static final String PARTICULAR_PAGE_IN_STAPLE = "//button[.//i[contains(@class,'icon-done')]]";
     private static final String CLOSE_PAGE_CARD_PREVIEW_BUTTON = ".//button[.//*[@data-testid='CloseIcon']]";
+    private static final String GO_TO_INPUT_LOC = "//form[.//div[@aria-label='Go to input']]";
+    private static final String FIRST_PAGE_IN_STAPLE_BY_PAGE_NUM = "//div[contains(@class,'card-page-wrapper')]/div[@data-document-page-number='%d' and @data-page-staple-order='1']";
 
+    private final SelenideElement goToPageInput = $x(GO_TO_INPUT_LOC + "//input");
+    private final SelenideElement goToPageBtn = $x(GO_TO_INPUT_LOC + "//button[contains(text(),'Go to page')]");
     private final SelenideElement searchInput = $x("//div[@data-control-input='search']//input");
     private final SelenideElement caseContextMenuButton = $x("//button[contains(@data-action-button,'caseDropdown')]");
     private final SelenideElement caseContextMenuList = $x("//ul[contains(@class,'MuiList-root') and @role='menu']");
@@ -46,6 +51,7 @@ public class HomePage {
     private final SelenideElement addPageToWorkspaceBtn = $x(ACTION_BUTTON.formatted("addPageToWorkspace"));
     private final SelenideElement removePageFromWorkspaceBtn = $x(ACTION_BUTTON.formatted("removePageFromWorkspace"));
     private final SelenideElement totalNumberOfPagesInWorkspace = $x("//div[contains(@class,'MuiToolbar-regular') and .//*[contains(text(),'Total number of pages: ')]]");
+    private final SelenideElement scrollUpBtn = $x("//button[contains(@class,'MuiFab-root') and .//@data-testid='KeyboardArrowUpIcon']");
 
     private final ElementsCollection caseDocumentsTitles = $$x("//ul[contains(@class,'MuiList-root')]//*[contains(@data-scroll-id,'document')]");
     private final ElementsCollection documentsList = $$x("//ul[contains(@class,'MuiList-root')]/li");
@@ -53,8 +59,8 @@ public class HomePage {
     private final ElementsCollection pageCardsLoc = $$x("//div[contains(@class,'scrollListContainer')]//div[contains(@class,'card-page-wrapper')]");
     private final ElementsCollection pageCardImageLocator = $$x("//img[@class='card-page-image-body']");
 
-    private static void addPagesToStaple(int startIndex, int pagesSize) {
-        IntStream.range(startIndex, startIndex + pagesSize).boxed().forEach(index -> {
+    private static void addPagesToStaple(int startIndex, int endIndex) {
+        IntStream.range(startIndex, endIndex).boxed().forEach(index -> {
             $x(PAGE_LOC_BY_NUMBER.formatted(index) + ADD_PARTICULAR_PAGE_TO_STAPLE)
                     .scrollIntoView(SCROLL_TO_PARAMETER)
                     .shouldBe(visible)
@@ -92,10 +98,11 @@ public class HomePage {
         caseContextMenuList.should(exist).shouldBe(visible);
     }
 
-    public void openDuplicateAction() {
+    public HomePage openDuplicateAction() {
         expandCaseContextMenu();
         caseContextMenuList.$x(".//li[contains(@name,'Duplicate case')]").scrollTo().click();
         caseDuplicateDialog.should(exist).shouldBe(visible);
+        return this;
     }
 
     public List<Document> getParsedDocuments() {
@@ -108,7 +115,7 @@ public class HomePage {
                             .replace("page(s)", "")
                             .trim();
                     var processingStatus = element.getAttribute("data-document-status");
-                    return Document.builder().numPages(Integer.parseInt(numPages)).status(processingStatus).title(title).build();
+                    return Document.builder().title(title).numPages(Integer.parseInt(numPages)).status(processingStatus).build();
                 }).toList();
     }
 
@@ -133,11 +140,9 @@ public class HomePage {
     }
 
     @Step("Open document")
-    public HomePage openDocument(List<String> title) {
-        var document = title.stream().findFirst().orElseThrow();
-        log.info("Opening document: {} ", document);
-        searchDocument(document);
-        documentElementContainer.$x(".//a[contains(@data-document-status,'ready') and .//text()='%s']".formatted(document)).click();
+    public HomePage openDocument(@NonNull String title) {
+        searchDocument(title);
+        documentElementContainer.$x(".//a[contains(@data-document-status,'ready') and .//text()='%s']".formatted(title)).click();
         closePreviewModalIfShown();
         pageCardsLoc.shouldHave(CollectionCondition.sizeGreaterThan(0));
         waitUntilPageCardIsLoading();
@@ -151,8 +156,9 @@ public class HomePage {
         documentsList.shouldHave(CollectionCondition.sizeGreaterThan(0));
     }
 
-    public void openWorkspace() {
+    public WorkspacePage openWorkspace() {
         openCaseTab("workspace");
+        return new WorkspacePage();
     }
 
     @Step("Open {0} case tab")
@@ -175,16 +181,23 @@ public class HomePage {
         }
     }
 
-    public void scrollToParticularPage(int mainPage) {
+    private void scrollToParticularPage(int mainPage) {
         log.info("Screen is moving to page: {}", mainPage);
+        goToPage(mainPage);
         do {
-            pageCardsLoc.get(mainPage - 1).shouldBe(visible).scrollIntoView(SCROLL_TO_PARAMETER);
-            waitUntilPageCardIsLoading();
-        } while (!pageCardsLoc.get(mainPage - 1).is(visible));
-        closePreviewModalIfShown();
+                actions().scrollToElement(pageCardsLoc.get(mainPage)).scrollByAmount(0, 333);
+                waitUntilPageCardIsLoading();
+            } while (!$x(PAGE_LOC_BY_NUMBER.formatted(mainPage)).isDisplayed());
+            closePreviewModalIfShown();
     }
 
-    protected void waitUntilPageCardIsLoading() {
+    private void goToPage(int mainPage) {
+        clearInput(goToPageInput);
+        goToPageInput.shouldBe(exist).sendKeys(String.valueOf(mainPage));
+        goToPageBtn.shouldBe(enabled).click();
+    }
+
+    private void waitUntilPageCardIsLoading() {
         closePreviewModalIfShown();
         pageCardImageLocator.shouldHave(CollectionCondition.sizeGreaterThan(1))
                 .last()
@@ -193,13 +206,14 @@ public class HomePage {
     }
 
     @Step("Staple pages from {0} to {1}")
-    public void staplePages(int startIndex, int pagesSize) {
+    public HomePage staplePages(int startIndex, int endIndex) {
         log.info("Stapling pages: {}", startIndex);
         scrollToParticularPage(startIndex);
         closePreviewModalIfShown();
         stapleBtn.shouldBe(enabled).click();
-        addPagesToStaple(startIndex, pagesSize);
+        addPagesToStaple(startIndex, endIndex);
         saveStaple();
+        return this;
     }
 
     @Step("Save staple")
@@ -242,7 +256,8 @@ public class HomePage {
 
     public Integer getNumOfPagesInStaple(int mainPage) {
         scrollToParticularPage(mainPage);
-        stapledIcon.shouldHave(CollectionCondition.sizeGreaterThan(0)).first().hover();
+        stapledIcon.shouldHave(CollectionCondition.sizeGreaterThan(0));
+        $x(FIRST_PAGE_IN_STAPLE_BY_PAGE_NUM.formatted(mainPage) + "//i[contains(@class, 'icon-stapled')]").doubleClick().hover();
         return Integer.valueOf(pagesInStapleTooltipLoc.getText().replace("page(s) in staple", "").trim());
     }
 
@@ -257,7 +272,7 @@ public class HomePage {
         return this;
     }
 
-    public void closePreviewModalIfShown() {
+    private void closePreviewModalIfShown() {
         while (pageCardPreviewLoc.isDisplayed()) {
             pageCardPreviewLoc.$x(CLOSE_PAGE_CARD_PREVIEW_BUTTON).should(appear).shouldBe(visible).click();
         }

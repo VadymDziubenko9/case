@@ -4,9 +4,13 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.Step;
 import io.qameta.allure.selenide.AllureSelenide;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogEntry;
+
+import java.util.List;
 
 import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -16,6 +20,7 @@ import static org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT_AND_NOTIFY;
 import static org.openqa.selenium.remote.CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR;
 
 @Slf4j
+@UtilityClass
 public class WebDriverManager {
     public static String openNewTab() {
         ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
@@ -24,6 +29,10 @@ public class WebDriverManager {
 
     public static void clearCookies() {
         getWebDriver().manage().deleteAllCookies();
+    }
+
+    public static List<LogEntry> getBrowserLogs(){
+        return getWebDriver().manage().logs().get("browser").getAll();
     }
 
     @Step("Driver Initialization")
@@ -41,7 +50,7 @@ public class WebDriverManager {
         Configuration.baseUrl = "https://cases-qa.casechronology.com";
         Configuration.browserSize = "1920x1080";
         Configuration.fastSetValue = false;
-        Configuration.timeout = 8_000;
+        Configuration.timeout = 10_000;
         Configuration.headless = false;
         Configuration.downloadsFolder = "selenideFolder";
         Configuration.fileDownload = FOLDER;

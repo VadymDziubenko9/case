@@ -1,6 +1,5 @@
 package page.object.portal.cases;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static utils.Config.BASE_URL;
 
 @Slf4j
 public class LoginPage {
@@ -21,7 +21,7 @@ public class LoginPage {
     @Step("Login to Case Chronology with credentials: {0}/ {1},  fot method: {method} step...")
     public LoginPage login(String email, String password) {
         log.info("User logging with\n email: {} \n password: {} ", email, password);
-        open(Configuration.baseUrl);
+        open(BASE_URL);
         emailLoc.sendKeys(email);
         passwordLoc.sendKeys(password);
         logInButton.shouldBe(enabled).click();
@@ -37,6 +37,4 @@ public class LoginPage {
     public String getCurrentUrl(){
         return getWebDriver().getCurrentUrl();
     }
-
-
 }

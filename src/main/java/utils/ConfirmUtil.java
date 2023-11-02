@@ -46,7 +46,8 @@ public class ConfirmUtil {
             exception.printStackTrace();
         }
     }
-        public static void confirmAction(String message) {
+
+    public static void confirmAction(String message) {
         $x(CONFIRMATION_DIALOG.formatted(message)).shouldBe(visible);
         $x(CONFIRMATION_DIALOG.formatted(message) + "//button[normalize-space()='Confirm']").shouldBe(visible).click();
     }
