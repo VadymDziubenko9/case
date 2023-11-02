@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class Document {
     private String title;
-    private String status;
+    @Builder.Default
+    private String status = "ready";
     private int numPages;
 }
