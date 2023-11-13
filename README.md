@@ -32,7 +32,7 @@ List of environment properties to be set before test run:
   userPassword
  ```
 
-![Screenshot 2023-11-13 at 16.44.00.png](..%2F..%2FScreenshot%202023-11-13%20at%2016.44.00.png)
+![Environment Variables](./resources/EnvVariables.png)
 ___
 
 ### Allure Report generation
@@ -50,7 +50,7 @@ allureServe
 ```
 
 ___
-![img](..%2F..%2FScreenshot%202023-11-13%20at%2016.49.07.png)
+![XMLFile](./resources/testNGXMLFile.png)
 
 ```shell
 TestNG xml file example
