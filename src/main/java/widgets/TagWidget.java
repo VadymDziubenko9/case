@@ -5,17 +5,17 @@ import io.qameta.allure.Step;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
+import page.object.portal.cases.BaseAbstractPage;
 import utils.AwaitUtil;
 
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$x;
-import static utils.ConfirmUtil.*;
 
 @Slf4j
 @UtilityClass
-public class TagWidget {
+public class TagWidget extends BaseAbstractPage {
     private final String PAGE_LOC_BY_NUMBER = "//div[contains(@class,'card-page-wrapper')]/div[@data-document-name='%s' and @data-document-page-number='%d']";
     private final String PAGE_CARD_SET_TAG_BUTTON = "//div[contains(@class,'cp-head')]//div[@role='button']";
     private final String SELECTED_TAG_VIEW = ".//div[@data-action-chip='%s']//..//div[@data-active-chip='true']";

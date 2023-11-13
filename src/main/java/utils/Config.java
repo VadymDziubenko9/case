@@ -30,4 +30,6 @@ public class Config {
         if (StringUtils.isEmpty(pageUrl)) throw new IllegalArgumentException("Base Url is not provided!");
         return pageUrl;
     }
+
+
 }

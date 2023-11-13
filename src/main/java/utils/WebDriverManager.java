@@ -27,11 +27,15 @@ public class WebDriverManager {
         return getWebDriver().getWindowHandles().toArray()[1].toString();
     }
 
+    public static String getOperatingSystem() {
+        return System.getProperty("os.name");
+    }
+
     public static void clearCookies() {
         getWebDriver().manage().deleteAllCookies();
     }
 
-    public static List<LogEntry> getBrowserLogs(){
+    public static List<LogEntry> getBrowserLogs() {
         return getWebDriver().manage().logs().get("browser").getAll();
     }
 

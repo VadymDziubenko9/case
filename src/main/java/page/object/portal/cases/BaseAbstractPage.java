@@ -1,28 +1,36 @@
-package utils;
+package page.object.portal.cases;
 
 import com.codeborne.selenide.SelenideElement;
-import lombok.experimental.UtilityClass;
+import io.qameta.allure.Step;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.Keys;
 
-import java.util.Objects;
-
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
-
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$x;
+import static utils.WebDriverManager.getOperatingSystem;
 @Slf4j
-@UtilityClass
-public class ConfirmUtil {
+public abstract class BaseAbstractPage {
     private static final SelenideElement snackBarDialog = $x("//div[@class='SnackbarItem-message']");
+    private static final SelenideElement snackBarCloseBtn = $x("//button[@data-action-button='closeSnackbar' or @data-action-button='closeNotification']");
     private static final String CONFIRMATION_DIALOG = "//div[contains(@class, 'MuiPaper-root') and .//*[normalize-space()='%s']]";
+
+
+    @Step("Clear input")
+    public void clearInput(SelenideElement locator) {
+        log.info("Input clear action");
+        if (getOperatingSystem().toLowerCase().contains("mac os")) {
+            locator.sendKeys(Keys.COMMAND, "A");
+        } else {
+            locator.sendKeys(Keys.CONTROL, "A");
+        }
+        locator.sendKeys(Keys.BACK_SPACE);
+    }
 
     public static void closeAllBubbles() {
         log.info("Closing all visible bubble messages");
         if (snackBarDialog.should(exist).isDisplayed()) {
-            $x("//button[@data-action-button='closeSnackbar' or @data-action-button='closeNotification']")
-                    .shouldBe(exist)
-                    .shouldBe(enabled)
-                    .click();
+            snackBarCloseBtn.shouldBe(enabled).click();
         }
         snackBarDialog.shouldNotBe(visible);
     }
@@ -33,7 +41,6 @@ public class ConfirmUtil {
             $x("//div[@id='notistack-snackbar' and text()='%s']".formatted(message)).shouldBe(visible);
         } catch (Exception exception) {
             log.error(snackBarDialog.getText());
-            exception.printStackTrace();
         }
     }
 
@@ -43,7 +50,6 @@ public class ConfirmUtil {
             $x("//div[@id='notistack-snackbar' and text()='%s' or text()='%s']".formatted(message, alternativeMessage)).shouldBe(visible);
         } catch (Exception exception) {
             log.error(snackBarDialog.getText());
-            exception.printStackTrace();
         }
     }
 
@@ -52,9 +58,4 @@ public class ConfirmUtil {
         $x(CONFIRMATION_DIALOG.formatted(message) + "//button[normalize-space()='Confirm']").shouldBe(visible).click();
     }
 
-    public static void clearInput(SelenideElement locator) {
-        while (!Objects.requireNonNull(locator.getAttribute("value")).isEmpty()) {
-            actions().sendKeys(locator, Keys.BACK_SPACE).build().perform();
-        }
-    }
 }
