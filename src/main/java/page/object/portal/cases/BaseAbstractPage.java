@@ -6,15 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.Keys;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
-import static utils.WebDriverManager.getOperatingSystem;
+import static utils.WebDriverUtil.getOperatingSystem;
 @Slf4j
 public abstract class BaseAbstractPage {
     private static final SelenideElement snackBarDialog = $x("//div[@class='SnackbarItem-message']");
     private static final SelenideElement snackBarCloseBtn = $x("//button[@data-action-button='closeSnackbar' or @data-action-button='closeNotification']");
     private static final String CONFIRMATION_DIALOG = "//div[contains(@class, 'MuiPaper-root') and .//*[normalize-space()='%s']]";
-
 
     @Step("Clear input")
     public void clearInput(SelenideElement locator) {

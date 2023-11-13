@@ -7,21 +7,12 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import page.object.portal.cases.LoginPage;
 
-import static data.DocumentConstants.*;
+import static constants.DocumentConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.Config.USER_NAME;
 import static utils.Config.USER_PASSWORD;
 
 public class PageStaplingTest extends BaseAbstractTest {
-
-    @Step("Open {0} document and staple pages from {1} to {2}")
-    public void staplePages(String documentTitle, int fromPage, int ToPage) {
-        homePage
-                .openHomePage()
-                .openCase(COPIED_CASE_NAME)
-                .openDocument(documentTitle)
-                .staplePages(fromPage, ToPage);
-    }
 
     @BeforeClass(alwaysRun = true)
     public void login() {
@@ -138,5 +129,14 @@ public class PageStaplingTest extends BaseAbstractTest {
         assertThat(homePage.getNumOfPagesInStaple(1))
                 .as("The incorrect number of stapled pages is being displayed")
                 .isEqualTo(69);
+    }
+
+    @Step("Open {0} document and staple pages from {1} to {2}")
+    public void staplePages(String documentTitle, int fromPage, int ToPage) {
+        homePage
+                .openHomePage()
+                .openCase(COPIED_CASE_NAME)
+                .openDocument(documentTitle)
+                .staplePages(fromPage, ToPage);
     }
 }

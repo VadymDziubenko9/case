@@ -2,29 +2,20 @@ package regression;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
-import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import page.object.portal.cases.LoginPage;
 
-import static data.DocumentConstants.*;
+import static constants.DocumentConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static utils.Config.*;
+import static utils.Config.USER_NAME;
+import static utils.Config.USER_PASSWORD;
 
 public class PageAdditionToWorkspaceTest extends BaseAbstractTest {
 
     @BeforeClass(alwaysRun = true)
     public void login() {
         new LoginPage().login(USER_NAME, USER_PASSWORD);
-    }
-
-    @Step("Open {1} page in Workspace view")
-    public void addPageToWorkspace(String documentTitle, int pageNum) {
-        homePage
-                .openHomePage()
-                .openCase(COPIED_CASE_NAME)
-                .openDocument(documentTitle)
-                .addPageToWorkspace(pageNum);
     }
 
     @Test
@@ -74,8 +65,7 @@ public class PageAdditionToWorkspaceTest extends BaseAbstractTest {
                 .openWorkspace()
                 .openPageCardInWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 8);
 
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
+        assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
                     .as("Include page in to workspace toggle unchecked")
                     .isTrue();
             addPageToWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 47);
@@ -83,9 +73,17 @@ public class PageAdditionToWorkspaceTest extends BaseAbstractTest {
                     .openWorkspace()
                     .openPageCardInWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 47);
 
-            softAssertions.assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
-                    .as("Include page in to workspace toggle unchecked")
-                    .isTrue();
-        });
+        assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
+                .as("Include page in to workspace toggle unchecked");
+
+    }
+
+    @Step("Open {1} page in Workspace view")
+    private void addPageToWorkspace(String documentTitle, int pageNum) {
+        homePage
+                .openHomePage()
+                .openCase(COPIED_CASE_NAME)
+                .openDocument(documentTitle)
+                .addPageToWorkspace(pageNum);
     }
 }

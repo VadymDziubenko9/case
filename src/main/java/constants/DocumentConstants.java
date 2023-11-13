@@ -1,7 +1,7 @@
-package data;
+package constants;
 
+import dto.Document;
 import lombok.experimental.UtilityClass;
-import page.object.portal.models.Document;
 
 import java.util.List;
 

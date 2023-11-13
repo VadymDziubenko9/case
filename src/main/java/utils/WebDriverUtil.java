@@ -21,7 +21,7 @@ import static org.openqa.selenium.remote.CapabilityType.UNHANDLED_PROMPT_BEHAVIO
 
 @Slf4j
 @UtilityClass
-public class WebDriverManager {
+public class WebDriverUtil {
     public static String openNewTab() {
         ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
         return getWebDriver().getWindowHandles().toArray()[1].toString();

@@ -3,11 +3,11 @@ package page.object.portal.cases;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import dto.Document;
 import io.qameta.allure.Step;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.Keys;
-import page.object.portal.models.Document;
 
 import java.time.Duration;
 import java.util.List;

@@ -7,21 +7,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import page.object.portal.cases.LoginPage;
 
-import static data.DocumentConstants.*;
+import static constants.DocumentConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static utils.Config.USER_NAME;
 import static utils.Config.USER_PASSWORD;
 
 public class PageColorAdditionTest extends BaseAbstractTest {
     private static final String RED_COLOR = "red";
-
-    @Step("Open {1} page in Workspace view")
-    public void openPageInWorkspace(String documentTitle, int pageNumber) {
-        homePage
-                .openHomePage()
-                .openCase(COPIED_CASE_NAME)
-                .openWorkspace()
-                .openPageCardInWorkspace(documentTitle, pageNumber);
-    }
 
     @BeforeClass(alwaysRun = true)
     public void login() {
@@ -80,17 +72,14 @@ public class PageColorAdditionTest extends BaseAbstractTest {
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
         workspacePage.setModalPageColor(RED_COLOR);
 
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(workspacePage.getModalPageColor())
-                    .as("Color is not displayed on Modal view")
-                    .isEqualTo(RED_COLOR);
+        assertThat(workspacePage.getModalPageColor())
+                .as("Color is not displayed on Modal view")
+                .isEqualTo(RED_COLOR);
 
-            modalPage.closeModalView();
+        modalPage.closeModalView();
+        assertThat(workspacePage.getPageColor(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
+                .as("Color is not displayed on File view");
 
-            softAssertions.assertThat(workspacePage.getPageColor(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
-                    .as("Color is not displayed on File view")
-                    .isEqualTo(RED_COLOR);
-        });
     }
 
     @Test
@@ -101,16 +90,14 @@ public class PageColorAdditionTest extends BaseAbstractTest {
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
         workspacePage.setModalPageColor(RED_COLOR);
 
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(workspacePage.getModalPageColor())
-                    .as("Color is not displayed on Modal view")
-                    .isEqualTo(RED_COLOR);
-            modalPage.closeModalView();
+        assertThat(workspacePage.getModalPageColor())
+                .as("Color is not displayed on Modal view")
+                .isEqualTo(RED_COLOR);
+        modalPage.closeModalView();
 
-            softAssertions.assertThat(workspacePage.getPageColor(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
-                    .as("Color is not displayed on File view")
-                    .isEqualTo(RED_COLOR);
-        });
+        assertThat(workspacePage.getPageColor(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
+                .as("Color is not displayed on File view")
+                .isEqualTo(RED_COLOR);
     }
 
     @Test
@@ -144,4 +131,14 @@ public class PageColorAdditionTest extends BaseAbstractTest {
                     .isEqualTo(RED_COLOR);
         });
     }
+
+    @Step("Open {1} page in Workspace view")
+    public void openPageInWorkspace(String documentTitle, int pageNumber) {
+        homePage
+                .openHomePage()
+                .openCase(COPIED_CASE_NAME)
+                .openWorkspace()
+                .openPageCardInWorkspace(documentTitle, pageNumber);
+    }
+
 }

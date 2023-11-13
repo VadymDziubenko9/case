@@ -5,11 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import page.object.portal.cases.*;
+import page.object.portal.cases.CaseDuplicationPage;
+import page.object.portal.cases.LoginPage;
 
-import static data.DocumentConstants.getDocumentsListOfTitles;
-import static data.DocumentConstants.getExpectedDocumentsList;
-import static enums.DuplicateOptions.getExpectedOptionsList;
+import static constants.DocumentConstants.getDocumentsListOfTitles;
+import static constants.DocumentConstants.getExpectedDocumentsList;
+import static enums.DuplicateOption.getExpectedOptionsList;
 import static enums.Team.QA_TEAM;
 import static org.assertj.core.api.Assertions.assertThat;
 import static page.object.portal.cases.CaseDuplicationPage.getExpectedMediaList;

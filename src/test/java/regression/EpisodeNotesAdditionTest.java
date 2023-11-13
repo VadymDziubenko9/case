@@ -7,21 +7,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import page.object.portal.cases.LoginPage;
 
-import static data.DocumentConstants.*;
-import static data.EpisodeConstants.*;
+import static constants.DocumentConstants.*;
+import static constants.EpisodeConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static utils.Config.USER_NAME;
 import static utils.Config.USER_PASSWORD;
 
 public class EpisodeNotesAdditionTest extends BaseAbstractTest {
-
-    @Step("Open page in Workspace view")
-    public void openPageInWorkspace(String documentTitle, int pageNumber) {
-        homePage
-                .openHomePage()
-                .openCase(COPIED_CASE_NAME)
-                .openWorkspace()
-                .openPageCardInWorkspace(documentTitle, pageNumber);
-    }
 
     @BeforeClass(alwaysRun = true)
     public void login() {
@@ -35,21 +27,19 @@ public class EpisodeNotesAdditionTest extends BaseAbstractTest {
         DOCUMENT_TITLE = DOCUMENT_13153612_PDF.getTitle();
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
 
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(workspacePage.getModalViewDocumentTitle())
+        assertThat(workspacePage.getModalViewDocumentTitle())
                     .as("Document isn't opened or wrong one is opened")
                     .isEqualTo(DOCUMENT_TITLE);
             modalPage.fillEpisodeNotes(EPISODE_NOTES_13153612).saveEpisodeOnEdit();
 
-            softAssertions.assertThat(modalPage.parseEpisode().getNotes())
+        assertThat(modalPage.parseEpisode().getNotes())
                     .as("Episode notes don't match")
                     .isEqualTo(EPISODE_NOTES_13153612.getNotes());
             modalPage.closeModalView();
 
-            softAssertions.assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
+        assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
                     .as("Notes Icon on page card doesn't appear")
                     .isTrue();
-        });
     }
 
     @Test
@@ -59,21 +49,19 @@ public class EpisodeNotesAdditionTest extends BaseAbstractTest {
         DOCUMENT_TITLE = BESTSIDE_MEDICAL_GROUP_PDF.getTitle();
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
 
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(workspacePage.getModalViewDocumentTitle())
+        assertThat(workspacePage.getModalViewDocumentTitle())
                     .as("Document isn't opened or wrong one is opened")
                     .isEqualTo(DOCUMENT_TITLE);
             modalPage.fillEpisodeNotes(BEST_SIDE_MEDICAL_GROUP_EPISODE_NOTES).saveEpisodeOnEdit();
 
-            softAssertions.assertThat(modalPage.parseEpisode().getNotes())
+        assertThat(modalPage.parseEpisode().getNotes())
                     .as("Episode notes don't match")
                     .isEqualTo(BEST_SIDE_MEDICAL_GROUP_EPISODE_NOTES.getNotes());
             modalPage.closeModalView();
 
-            softAssertions.assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
+        assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
                     .as("Notes Icon on page card doesn't appear")
                     .isTrue();
-        });
     }
 
     @Test
@@ -216,21 +204,19 @@ public class EpisodeNotesAdditionTest extends BaseAbstractTest {
         DOCUMENT_TITLE = ROBERT_CHASE_PDF.getTitle();
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
 
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(workspacePage.getModalViewDocumentTitle())
+        assertThat(workspacePage.getModalViewDocumentTitle())
                     .as("Document isn't opened or wrong one is opened")
                     .isEqualTo(DOCUMENT_TITLE);
             modalPage.fillEpisodeNotes(ROBERT_CHASE_EPISODE_NOTES).saveEpisodeOnEdit();
 
-            softAssertions.assertThat(modalPage.parseEpisode().getNotes())
+        assertThat(modalPage.parseEpisode().getNotes())
                     .as("Episode notes don't match")
                     .isEqualTo(ROBERT_CHASE_EPISODE_NOTES.getNotes());
             modalPage.closeModalView();
 
-            softAssertions.assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
+        assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
                     .as("Notes Icon on page card doesn't appear")
                     .isTrue();
-        });
     }
 
     @Test
@@ -299,20 +285,28 @@ public class EpisodeNotesAdditionTest extends BaseAbstractTest {
         MAIN_STAPLE_PAGE = 1;
         DOCUMENT_TITLE = JOHN_SMITH_V_2_PDF.getTitle();
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(workspacePage.getModalViewDocumentTitle())
+
+        assertThat(workspacePage.getModalViewDocumentTitle())
                     .as("Document isn't opened or wrong one is opened")
                     .isEqualTo(DOCUMENT_TITLE);
             modalPage.fillEpisodeNotes(JOHN_SMITH_EPISODE_NOTES).saveEpisodeOnEdit();
 
-            softAssertions.assertThat(modalPage.parseEpisode().getNotes())
+        assertThat(modalPage.parseEpisode().getNotes())
                     .as("Episode notes don't match")
                     .isEqualTo(JOHN_SMITH_EPISODE_NOTES.getNotes());
             modalPage.closeModalView();
 
-            softAssertions.assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
+        assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
                     .as("Notes Icon on page card doesn't appear")
                     .isTrue();
-        });
+    }
+
+    @Step("Open page in Workspace view")
+    public void openPageInWorkspace(String documentTitle, int pageNumber) {
+        homePage
+                .openHomePage()
+                .openCase(COPIED_CASE_NAME)
+                .openWorkspace()
+                .openPageCardInWorkspace(documentTitle, pageNumber);
     }
 }

@@ -1,5 +1,6 @@
 package regression;
 
+import dto.Episode;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import lombok.extern.slf4j.Slf4j;
@@ -7,28 +8,15 @@ import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import page.object.portal.cases.LoginPage;
-import page.object.portal.models.Episode;
 
-import static data.DocumentConstants.*;
-import static data.EpisodeConstants.*;
+import static constants.DocumentConstants.*;
+import static constants.EpisodeConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static utils.Config.USER_NAME;
 import static utils.Config.USER_PASSWORD;
 
 @Slf4j
 public class BasicEpisodeDataPopulationTest extends BaseAbstractTest {
-
-    @Step("Create page {1} episode on {2} page in {0} document")
-    public void createEpisode(String documentTitle, Episode episode, int number) {
-        log.info("Create {1} episode on {2} page number and for {0} document");
-        homePage
-                .openHomePage()
-                .openCase(COPIED_CASE_NAME)
-                .openDocument(documentTitle)
-                .openPage(number)
-                .openCreateEpisodeForm()
-                .fillInEpisodeForm(episode)
-                .saveEpisode();
-    }
 
     @BeforeClass(alwaysRun = true)
     public void login() {
@@ -42,16 +30,14 @@ public class BasicEpisodeDataPopulationTest extends BaseAbstractTest {
         createEpisode(DOCUMENT_13153612_PDF.getTitle(), EPISODE_13153612, MAIN_STAPLE_PAGE);
         modalPage.ifNotParentMarkAsParent(EPISODE_13153612);
 
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(modalPage.parseEpisode())
+        assertThat(modalPage.parseEpisode())
                     .as("Episode data should properly displayed")
                     .isEqualTo(EPISODE_13153612);
 
-            softAssertions.assertThat(modalPage.isPreEventToggleSelected())
+        assertThat(modalPage.isPreEventToggleSelected())
                     .as("Episode shouldn't be selected if episode date bigger than event")
                     .isFalse();
             modalPage.closeModalView();
-        });
     }
 
     @Test
@@ -217,16 +203,14 @@ public class BasicEpisodeDataPopulationTest extends BaseAbstractTest {
         createEpisode(ROBERT_CHASE_PDF.getTitle(), ROBERT_CHASE_EPISODE, MAIN_STAPLE_PAGE);
         modalPage.ifNotParentMarkAsParent(ROBERT_CHASE_EPISODE);
 
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(modalPage.parseEpisode())
+        assertThat(modalPage.parseEpisode())
                     .as("Episode data should properly displayed")
                     .isEqualTo(ROBERT_CHASE_EPISODE);
 
-            softAssertions.assertThat(modalPage.isPreEventToggleSelected())
+        assertThat(modalPage.isPreEventToggleSelected())
                     .as("Episode shouldn't be selected if episode date bigger than event")
                     .isFalse();
             modalPage.closeModalView();
-        });
     }
 
     @Test
@@ -304,16 +288,14 @@ public class BasicEpisodeDataPopulationTest extends BaseAbstractTest {
         createEpisode(JOHN_SMITH_V_2_PDF.getTitle(), JOHN_SMITH_EPISODE, MAIN_STAPLE_PAGE);
         modalPage.ifNotParentMarkAsParent(JOHN_SMITH_EPISODE);
 
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(modalPage.parseEpisode())
+        assertThat(modalPage.parseEpisode())
                     .as("Episode data should properly displayed")
                     .isEqualTo(JOHN_SMITH_EPISODE);
 
-            softAssertions.assertThat(modalPage.isPreEventToggleSelected())
+        assertThat(modalPage.isPreEventToggleSelected())
                     .as("Episode shouldn't be selected if episode date bigger than event")
                     .isFalse();
             modalPage.closeModalView();
-        });
     }
 
     @Test(description = "Verify basic episode data population for Smith Demo Fishing.pdf document")
@@ -323,15 +305,26 @@ public class BasicEpisodeDataPopulationTest extends BaseAbstractTest {
         createEpisode(SMITH_DEMO_FISHING_PDF.getTitle(), FISHING_SINGLE_EPISODE, MAIN_STAPLE_PAGE);
         modalPage.ifNotParentMarkAsParent(FISHING_SINGLE_EPISODE);
 
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(modalPage.parseEpisode())
+        assertThat(modalPage.parseEpisode())
                     .as("Episode data should properly displayed")
                     .isEqualTo(FISHING_SINGLE_EPISODE);
 
-            softAssertions.assertThat(modalPage.isPreEventToggleSelected())
+        assertThat(modalPage.isPreEventToggleSelected())
                     .as("Episode shouldn't be selected if episode date bigger than event")
                     .isFalse();
             modalPage.closeModalView();
-        });
+    }
+
+    @Step("Create page {1} episode on {2} page in {0} document")
+    private void createEpisode(String documentTitle, Episode episode, int number) {
+        log.info("Create {1} episode on {2} page number and for {0} document");
+        homePage
+                .openHomePage()
+                .openCase(COPIED_CASE_NAME)
+                .openDocument(documentTitle)
+                .openPage(number)
+                .openCreateEpisodeForm()
+                .fillInEpisodeForm(episode)
+                .saveEpisode();
     }
 }

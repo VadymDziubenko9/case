@@ -6,7 +6,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import page.object.portal.cases.LoginPage;
 
-import static data.DocumentConstants.*;
+import static constants.DocumentConstants.*;
 import static enums.TagOps.BILLS;
 import static enums.TagOps.LEGAL;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,15 +18,6 @@ import static widgets.TagWidget.setPageTagOnModalView;
 public class PageTagAdditionTest extends BaseAbstractTest {
     private static final String LEGAL_LABEL = LEGAL.getName();
     private static int MAIN_STAPLE_PAGE = 1;
-
-    @Step("Open page in Workspace view")
-    public void openPageInWorkspace(String documentTitle, int pageNumber) {
-        homePage
-                .openHomePage()
-                .openCase(COPIED_CASE_NAME)
-                .openWorkspace()
-                .openPageCardInWorkspace(documentTitle, pageNumber);
-    }
 
     @BeforeClass(alwaysRun = true)
     public void login() {
@@ -98,4 +89,14 @@ public class PageTagAdditionTest extends BaseAbstractTest {
                 .as("Tag should be correctly shown on page card in the file view after edit")
                 .isEqualTo(LEGAL_LABEL);
     }
+
+    @Step("Open page in Workspace view")
+    public void openPageInWorkspace(String documentTitle, int pageNumber) {
+        homePage
+                .openHomePage()
+                .openCase(COPIED_CASE_NAME)
+                .openWorkspace()
+                .openPageCardInWorkspace(documentTitle, pageNumber);
+    }
+
 }

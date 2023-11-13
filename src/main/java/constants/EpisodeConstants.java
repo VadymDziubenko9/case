@@ -1,8 +1,8 @@
-package data;
+package constants;
 
+import dto.Episode;
 import lombok.Data;
 import lombok.experimental.UtilityClass;
-import page.object.portal.models.Episode;
 
 @UtilityClass
 @Data

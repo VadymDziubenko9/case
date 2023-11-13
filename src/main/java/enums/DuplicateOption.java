@@ -1,14 +1,16 @@
 package enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
+@Getter
 @AllArgsConstructor
-
-public enum DuplicateOptions {
+public enum DuplicateOption {
     EPISODE_LABELS("Episode labels"),
     EPISODE_NOTES("Episode notes"),
     EPISODE_FACTS("Episode facts"),
@@ -21,15 +23,6 @@ public enum DuplicateOptions {
     private final String name;
 
     public static List<String> getExpectedOptionsList() {
-        List<DuplicateOptions> list = new ArrayList<>();
-        list.add(EPISODE_LABELS);
-        list.add(EPISODE_NOTES);
-        list.add(EPISODE_FACTS);
-        list.add(PAGE_TAG);
-        list.add(PAGE_COLOR);
-        list.add(PAGE_IN_WORKSPACE);
-        list.add(PAGE_HIGHLIGHTS);
-        list.add(DOCUMENT_LABEL);
-        return list.stream().map(str -> str.name).toList();
+        return Arrays.stream(DuplicateOption.values()).map(str -> str.name).toList();
     }
 }

@@ -3,10 +3,10 @@ package page.object.portal.cases;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import dto.PageCard;
 import io.qameta.allure.Step;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
-import page.object.portal.models.PageCard;
 import utils.AwaitUtil;
 
 import java.time.Duration;

@@ -1,17 +1,17 @@
 package page.object.portal.cases;
 
 import com.codeborne.selenide.SelenideElement;
+import dto.Episode;
 import io.qameta.allure.Step;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.Keys;
-import page.object.portal.models.Episode;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$x;
 import static utils.JsUtil.waitForDomToLoad;
-import static utils.WebDriverManager.getOperatingSystem;
+import static utils.WebDriverUtil.getOperatingSystem;
 
 @AllArgsConstructor
 @Slf4j

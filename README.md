@@ -18,11 +18,8 @@ ___
 Execution of UI/ API tests by running appropriate Gradle task with params:
 
 ```shell
-./gradlew clean baseRegressionRun -DbaseUrl='baseUrl' -DuserName='userName' -DuserPassword='userPassword'
+./gradlew clean baseRegressionRun -DbaseUrl='baseUrl' -DuserName='userName' -DuserPassword='userPassword' -d
 ```
-
-#### NOTE:`--no-daemon` is set by default at gradle config.
-
 ___
 List of environment properties to be set before test run:
 
@@ -32,7 +29,7 @@ List of environment properties to be set before test run:
   userPassword
  ```
 
-![Environment Variables](src/main/resources/readme/EnvVariables.png)
+![envVariables](src/main/resources/readme/envVariables.png)
 ___
 
 ### Allure Report generation
@@ -40,7 +37,7 @@ ___
 UI autotests:
 
 ```shell
-allure serve regression/build/allure-results
+allure serve ./build/allure-results
 ```
 
 Using Gradle task:
@@ -48,11 +45,11 @@ Using Gradle task:
 ```shell
 allureServe
 ```
-
 ___
-![XMLFile](src/main/resources/readme/testNGXMLFile.png)
 
-```shell
-TestNG xml file example
-Gradle task that execute xml file with path to it
-```
+TestNG xml file example:
+![testNGXmlFile](src/main/resources/readme/testNGXmlFile.png)
+
+Gradle task that executes xml file with path to it:
+![gradleTask](src/main/resources/readme/gradleTask.png)
+

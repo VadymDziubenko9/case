@@ -7,14 +7,17 @@ import org.openqa.selenium.logging.LogEntry;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
-import page.object.portal.cases.*;
-import utils.WebDriverManager;
+import page.object.portal.cases.HomePage;
+import page.object.portal.cases.LoginPage;
+import page.object.portal.cases.ModalPage;
+import page.object.portal.cases.WorkspacePage;
+import utils.WebDriverUtil;
 
 import java.util.List;
 
 import static utils.Config.USER_NAME;
 import static utils.Config.USER_PASSWORD;
-import static utils.WebDriverManager.getBrowserLogs;
+import static utils.WebDriverUtil.getBrowserLogs;
 
 @Slf4j
 public abstract class BaseAbstractTest {
@@ -27,7 +30,7 @@ public abstract class BaseAbstractTest {
 
     @BeforeSuite(alwaysRun = true)
     public void setupConfig() {
-        WebDriverManager.initDriver();
+        WebDriverUtil.initDriver();
     }
 
     @AfterSuite(alwaysRun = true)

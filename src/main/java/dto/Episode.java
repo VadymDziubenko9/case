@@ -1,4 +1,4 @@
-package page.object.portal.models;
+package dto;
 
 import lombok.Builder;
 import lombok.Data;
