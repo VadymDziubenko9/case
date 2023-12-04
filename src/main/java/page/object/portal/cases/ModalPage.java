@@ -1,5 +1,7 @@
 package page.object.portal.cases;
 
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import dto.Episode;
 import io.qameta.allure.Step;
@@ -8,7 +10,11 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.Keys;
 
+import java.util.List;
+import java.util.Objects;
+
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 import static utils.JsUtil.waitForDomToLoad;
 import static utils.WebDriverUtil.getOperatingSystem;
@@ -36,6 +42,9 @@ public class ModalPage extends BaseAbstractPage{
     private final SelenideElement createEpisodeBtn = $x("//button[@data-action-button='createEpisodeFormDialog']");
     private final SelenideElement saveEpisodeBtn = $x("//button[@data-action-button='saveEpisodeForm']");
     private final SelenideElement modalViewContainerLoc = $x("//div[contains(@class,'MuiDialogContent-root')]");
+    private final SelenideElement episodeListItemLoc = $x("//div[contains(@data-test,'episodeListItem')]");
+
+    private final ElementsCollection suggestedOptions = $$x("//ul/li[contains(@class,'MuiAutocomplete-option')]");
 
     public ModalPage verifyIfPageOpened() {
         modalViewContainerLoc.shouldBe(exist).shouldBe(visible);
@@ -46,6 +55,24 @@ public class ModalPage extends BaseAbstractPage{
         if (closeModalViewLoc.isDisplayed()) {
             closeModalViewLoc.shouldBe(enabled).click();
         }
+    }
+
+    public List<String> getListOfSuggestedAuthors() {
+        return suggestedOptions.shouldHave(CollectionCondition.sizeGreaterThan(0))
+                .asFixedIterable()
+                .stream()
+                .map(SelenideElement::getText)
+                .toList();
+    }
+
+    public boolean verifyIsSuggestedAuthorMarkedAsVerified(String author) {
+        var selenideElements = suggestedOptions.asFixedIterable().stream().toList();
+        for (SelenideElement element : selenideElements) {
+            if (element.$x(".//*[@data-testid='CheckCircleIcon']/..").isDisplayed() && (element.getText().contains(author))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Step("Open create episode form")
@@ -70,7 +97,7 @@ public class ModalPage extends BaseAbstractPage{
     }
 
     @Step("Fill in episode time field")
-    private void fillEpisodeTime(@NonNull Episode episode) {
+    private void fillEpisodeTime(Episode episode) {
         log.info("Filling in an episode time field");
         clearInput(episodeTimeInput);
         episodeTimeInput.shouldBe(exist).sendKeys(episode.getTime());
@@ -91,7 +118,7 @@ public class ModalPage extends BaseAbstractPage{
     }
 
     @Step("Fill in episode author field")
-    private void fillEpisodeAuthor(@NonNull Episode episode) {
+    public void fillEpisodeAuthor(@NonNull Episode episode) {
         log.info("Filling in an episode author field");
         clearInput(episodeAuthorInput);
         episodeAuthorInput.shouldBe(exist).sendKeys(episode.getAuthor());
@@ -135,19 +162,25 @@ public class ModalPage extends BaseAbstractPage{
         log.info("Parsing episode");
         var attribute = "value";
         return Episode.builder()
-                .author(episodeAuthorInput.getAttribute(attribute))
-                .type(episodeTypeInput.getAttribute(attribute))
-                .date(episodeDateInput.getAttribute(attribute))
-                .time(episodeTimeInput.getAttribute(attribute))
+                .author(Objects.requireNonNull(episodeAuthorInput.getAttribute(attribute))
+                        .isEmpty() ? null : episodeAuthorInput.getAttribute(attribute))
+                .type(Objects.requireNonNull(episodeTypeInput.getAttribute(attribute))
+                        .isEmpty() ? null : episodeTypeInput.getAttribute(attribute))
+                .date(Objects.requireNonNull(episodeDateInput.getAttribute(attribute))
+                        .isEmpty() ? null : episodeDateInput.getAttribute(attribute))
+                .time(Objects.requireNonNull(episodeTimeInput.getAttribute(attribute))
+                        .isEmpty() ? null : episodeTimeInput.getAttribute(attribute))
                 .notes(episodeNotesInput.getText().isEmpty() ? null : episodeNotesInput.getText())
                 .build();
     }
 
     @Step("Delete episode action")
-    public void deleteEpisode() {
-        deleteEpisodeBtn.shouldBe(enabled).click();
-        waitTillBubbleMessageShown("Episode was deleted");
-        closeAllBubbles();
+    public void deleteAllEpisodes() {
+        while (episodeListItemLoc.isDisplayed()) {
+            deleteEpisodeBtn.shouldBe(enabled).click();
+            waitTillBubbleMessageShown("Episode was deleted");
+            closeAllBubbles();
+        }
     }
 
     public void ifNotParentMarkAsParent(@NonNull Episode episode) {
@@ -164,6 +197,12 @@ public class ModalPage extends BaseAbstractPage{
     public boolean isIncludePageIntoWorkspaceSelected() {
         waitForDomToLoad();
         return modalViewContainerLoc.$x(".//span[contains(@class,'Mui-checked') and .//input[@id='inWorkspace']]").is(visible);
+    }
+
+    public ModalPage tryToFindAuthorByKeyWords(String authorName) {
+        episodeAuthorInput.sendKeys(authorName);
+//        episodeAuthorInput.shouldBe(enabled).click();
+        return this;
     }
 
 }

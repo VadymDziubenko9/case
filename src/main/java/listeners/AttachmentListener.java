@@ -1,6 +1,8 @@
 package listeners;
 
+import io.qameta.allure.Allure;
 import io.qameta.allure.Attachment;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.OutputType;
@@ -11,6 +13,7 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static utils.WebDriverUtil.getBrowserLogs;
 
 @Slf4j
 public class AttachmentListener implements ITestListener, ISuiteListener {
@@ -26,6 +29,7 @@ public class AttachmentListener implements ITestListener, ISuiteListener {
         }
         if (webDriver != null) {
             saveScreenshot(webDriver);
+            Allure.addAttachment("Browser console logs", getConsoleLogs());
         }
     }
 
@@ -34,4 +38,7 @@ public class AttachmentListener implements ITestListener, ISuiteListener {
         return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
     }
 
+    private @NonNull String getConsoleLogs() {
+        return String.valueOf(getBrowserLogs());
+    }
 }

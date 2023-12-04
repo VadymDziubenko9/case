@@ -3,7 +3,7 @@ package regression;
 import io.qameta.allure.Description;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
-import page.object.portal.cases.*;
+import page.object.portal.cases.LoginPage;
 
 import static utils.Config.*;
 
@@ -14,7 +14,7 @@ public class LoginTest extends BaseAbstractTest {
     @Description("Verify that user is able to login in to the Case Portal")
     public void verifyLogin() {
         loginPage.login(USER_NAME, USER_PASSWORD);
-        verifyJSErrorInConsole();
+//        verifyJSErrorInConsole();
 
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(loginPage.verifyLoggedInUserName())

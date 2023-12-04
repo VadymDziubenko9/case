@@ -16,7 +16,7 @@ public class DocumentConstants {
     public static final Document ROBERT_CHASE_PDF = Document.builder().title("Robert Chase - 03.31.22.pdf").numPages(60).build();
     public static final Document STRONG_HEALTH_CARROLLWOOD_PDF = Document.builder().title("StrongHealth Carrollwood (138).pdf").numPages(138).build();
     public static final Document JOHN_SMITH_V_2_PDF = Document.builder().title("John Smith - 3.29.22_v2.pdf").numPages(70).build();
-    public static final Document SMITH_DEMO_EASTER_PDF = Document.builder().title("Smith Demo Easter.pdf").numPages(1).build();
+    public static final Document SMITH_DEMO_EASTER_PDF = Document.builder().title("Smith Demo  Easter.pdf").numPages(1).build();
     public static final Document SMITH_DEMO_FISHING_PDF = Document.builder().title("Smith Demo Fishing.pdf").numPages(1).build();
     public static final Document SMITH_DEMO_W_2_PDF = Document.builder().title("Smith Demo W2.pdf").numPages(3).build();
 

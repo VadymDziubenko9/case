@@ -2,7 +2,9 @@ package constants;
 
 import dto.Episode;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.RandomStringUtils;
 
 @UtilityClass
 @Data
@@ -136,4 +138,13 @@ public class EpisodeConstants {
                     "PAGE 21: ? X-RAY or MRI when doing JUDO at AGE 17.
                     Pg 126: Saw spine specialist from Ohio who discussed surgery""")
             .build();
+
+    public static final Episode SMITH_DEMO_EASTER_EPISODE = Episode.builder()
+            .author("Claimant_".concat(generateName()))
+            .type("Medical_".concat(generateName()))
+            .build();
+
+    private @NonNull String generateName() {
+        return RandomStringUtils.random(5, true, false).toUpperCase();
+    }
 }

@@ -35,6 +35,7 @@ public class HomePage extends BaseAbstractPage{
     private static final String CASE_CONTAINER_LOC = "//div[contains(@class,'MuiPaper-root') and .//a[contains(text(),'%s')]]";
     private static final String ACTIVE_CASES_TAB_LOC = "//div[contains(@class,'MuiToolbar-dense') and .//button[contains(@data-action-button-tab,'%s') and @aria-selected='true']]";
     private static final String CASE_CONTEXT_MENU_BTN = "//button[contains(@data-action-button,'caseDropdown')]";
+    private static final String HOME_PAGE_CONTEXT_MENU_LIST = "//ul[contains(@role,'menu')]//*[@data-action-menu-item='%s']";
 
     private final SelenideElement deleteCaseDialogLoc = $x("//div[contains(@role, 'dialog') and .//*[normalize-space()='Are you absolutely sure ?']]");
     private final SelenideElement submitCaseDeleteBtn = $x("//button[@data-action-button='submitDeleteCaseDialog']");
@@ -55,7 +56,9 @@ public class HomePage extends BaseAbstractPage{
     private final SelenideElement pagesInStapleTooltipLoc = $x("//div[@data-popper-placement='bottom']");
     private final SelenideElement pageCardPreviewLoc = $x("//div[contains(@class,'card-page-preview')]");
     private final SelenideElement removePageFromWorkspaceBtn = $x(ACTION_BUTTON.formatted("removePageFromWorkspace"));
+    private final SelenideElement homeContextMenuBtn = $x("//div[contains(@class,'MuiChip-root') and @role='button']");
 
+    private final ElementsCollection authorRegistryItems = $$x("//div[contains(@class,'MuiContainer-root')]//ul/li");
     private final ElementsCollection pageCardImageLocator = $$x("//img[@class='card-page-image-body']");
     private final ElementsCollection caseDocumentsTitles = $$x("//ul[contains(@class,'MuiList-root')]//*[contains(@data-scroll-id,'document')]");
     private final ElementsCollection documentsList = $$x("//ul[contains(@class,'MuiList-root')]/li");
@@ -342,5 +345,13 @@ public class HomePage extends BaseAbstractPage{
                 .first()
                 .should(appear)
                 .shouldBe(visible);
+    }
+
+    public AuthorRegistryPage openAuthorRegistry() {
+        homeContextMenuBtn.shouldBe(visible).click();
+        $x(HOME_PAGE_CONTEXT_MENU_LIST.formatted("authorRegistry")).shouldBe(visible).click();
+        authorRegistryItems.shouldHave(CollectionCondition.sizeGreaterThan(0));
+        $x("//div[h6[contains(text(),'Author Registry')]]").shouldBe(visible);
+        return new AuthorRegistryPage();
     }
 }

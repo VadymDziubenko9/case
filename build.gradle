@@ -62,6 +62,8 @@ dependencies {
     implementation "io.rest-assured:json-path:${restAssuredVersion}"
     implementation "io.rest-assured:json-schema-validator:${restAssuredVersion}"
     implementation "com.codeborne:selenide-full-screenshot:$selenideVer"
+    implementation 'org.apache.poi:poi:5.1.0';
+    implementation 'org.apache.poi:poi-ooxml:5.1.0'
 
     implementation 'org.testng:testng:7.8.0'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
