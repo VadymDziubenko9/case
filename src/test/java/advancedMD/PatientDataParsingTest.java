@@ -27,8 +27,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.sleep;
@@ -127,10 +131,9 @@ public class PatientDataParsingTest {
     @Test
     public void exportPatientInfoIntoExel() {
 //        jsonIssue();
-
         HashMap<Integer, String> concatenatedValues = inputStreamFromExcel();
         assert concatenatedValues != null;
-        var startIndex = 5791;
+        var startIndex = 8397;
         var retryCount = 3;
         List<Integer> keysInRange = concatenatedValues.keySet().stream()
                 .filter(key -> key >= startIndex)
@@ -248,16 +251,18 @@ public class PatientDataParsingTest {
             e.printStackTrace();
         }
     }
-}
 
-//        if (directory.exists() && directory.isDirectory()) {
-//            File[] directories = directory.listFiles(File::isDirectory);
-//            assert directories != null;
-//            Arrays.sort(directories, Comparator.comparingLong(File::lastModified).reversed());
-//            if (directories.length > 0) {
-//                File lastModifiedDirectory = directories[0];
-//                File newDirectory = new File(directory, outputDirectory);
-//                lastModifiedDirectory.renameTo(newDirectory);
-//            }
-//        }
+    public List<Integer> getMissedPatientFolders() {
+        List<Integer> missedFolders = new ArrayList<>();
+        String baseDirectoryPath = "advancedMD/";
+        for (int folderNumber = 1; folderNumber < Objects.requireNonNull(new File(baseDirectoryPath).list()).length; folderNumber++) {
+            var file = new File(baseDirectoryPath + folderNumber);
+            if (!file.exists()) {
+                missedFolders.add(Integer.valueOf(file.toString().replace(baseDirectoryPath, "")));
+                log.info(file.toString());
+            }
+        }
+        return missedFolders;
+    }
+}
 

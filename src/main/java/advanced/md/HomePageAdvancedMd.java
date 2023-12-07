@@ -5,7 +5,10 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
+
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.UnhandledAlertException;
 
 import java.time.Duration;
 
@@ -28,8 +31,7 @@ public class HomePageAdvancedMd {
     private final SelenideElement chartFilesLeftPanelItem = $x("//amds-left-panel-item[contains(@class,'ng-tns') and .//span[contains(text(),'hart Files')]]");
 
     public static void switchToFrame(SelenideElement locator) {
-        switchTo().defaultContent();
-        switchTo().frame(locator);
+        switchTo().defaultContent().switchTo().frame(locator);
     }
 
     public boolean searchAndOpenPatientWithRetry(String name, int maxRetries) {
@@ -88,15 +90,32 @@ public class HomePageAdvancedMd {
     }
 
     public PatientPageAdvancedMd openNotesTab() {
-        switchToFrame(patientInfo1FrameLoc);
-        notesLeftPanelItem.shouldBe(enabled).shouldBe(visible).click();
-        return new PatientPageAdvancedMd().isNotesTabOpened();
+        try {
+            switchToFrame(patientInfo1FrameLoc);
+            notesLeftPanelItem.shouldBe(enabled).shouldBe(visible).click();
+            return new PatientPageAdvancedMd().isNotesTabOpened();
+        } catch (UnhandledAlertException e) {
+            handleAlert(e);
+            return openNotesTab();
+        }
+    }
+
+    private void handleAlert(UnhandledAlertException exception) {
+        Alert alert = getWebDriver().switchTo().alert();
+        log.info("Alert Text: " + alert.getText());
+        log.info(exception.toString());
+        alert.dismiss();
     }
 
     public PatientPageAdvancedMd openChartFilesTab() {
-        switchToFrame(patientInfo1FrameLoc);
-        chartFilesLeftPanelItem.shouldBe(enabled).shouldBe(visible).click();
-        return new PatientPageAdvancedMd().isChartFilesTabOpened();
+        try {
+            switchToFrame(patientInfo1FrameLoc);
+            chartFilesLeftPanelItem.scrollIntoView(false).shouldBe(visible).click();
+            return new PatientPageAdvancedMd().isChartFilesTabOpened();
+        } catch (UnhandledAlertException e) {
+            handleAlert(e);
+            return openChartFilesTab();
+        }
     }
 
     public void closeAllTabs() {

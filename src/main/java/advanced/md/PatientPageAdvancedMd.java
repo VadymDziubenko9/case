@@ -5,13 +5,23 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import lombok.NonNull;
+<<<<<<< HEAD
+import org.hamcrest.Matchers;
 import org.openqa.selenium.Keys;
+import utils.AwaitUtil;
+=======
+import org.openqa.selenium.Keys;
+>>>>>>> main
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+<<<<<<< HEAD
+import java.time.Duration;
+=======
+>>>>>>> main
 import java.util.List;
 import java.util.*;
 
@@ -24,6 +34,14 @@ public class PatientPageAdvancedMd {
     private final SelenideElement patientDataFrame = $x("//div[contains(@class,'main-container')]//*[@name='Patient']");
     private final SelenideElement patientNameLocator = $x("//div[@id='ellPtPatient']");
     private final SelenideElement responsibilityPartyNameLocator = $x("//div[@id='ellPtRespParty']");
+<<<<<<< HEAD
+    private final SelenideElement emailLocator = $x("//input[@id='txtPtEmail']");
+    private final SelenideElement notesLocator = $x("//textarea[@id='txtjQCommunicationNote']");
+    private final SelenideElement financialClassLocator = $x("//input[@id='txtPtFinClass']");
+    private final SelenideElement financialClassDescriptionLocator = $x("//div[@id='ellPtFinClass']");
+    private final SelenideElement providerProfileLocator = $x("//input[@id='txtPtProvCode']");
+    private final SelenideElement providerProfileDescriptionLocator = $x("//div[@id='ellPtProfile']");
+=======
 
     private final SelenideElement emailLocator = $x("//input[@id='txtPtEmail']");
     private final SelenideElement notesLocator = $x("//textarea[@id='txtjQCommunicationNote']");
@@ -34,6 +52,7 @@ public class PatientPageAdvancedMd {
     private final SelenideElement providerProfileLocator = $x("//input[@id='txtPtProvCode']");
     private final SelenideElement providerProfileDescriptionLocator = $x("//div[@id='ellPtProfile']");
 
+>>>>>>> main
     private final SelenideElement preferredLanguageLocator = $x("//div[@id='ellLanguage']");
     private final SelenideElement memosDataContainer = $x("//div[contains(@id,'divOuter') and .//span[contains(@id,'spnTabName') and text()='Memos - ']]");
     private final SelenideElement notesDataContainer = $x("//div[contains(@id,'divOuter') and .//span[contains(@id,'spnTabName') and text()='Patient Notes - ']]");
@@ -41,9 +60,13 @@ public class PatientPageAdvancedMd {
     private final ElementsCollection memosTables = $$x("//table[@id='tblMemos']//tr");
     private final ElementsCollection notesTables = $$x("//div[@id='divNoteGrid']//table//tr");
     private final SelenideElement notesAndMemosFrameLocator = $x("//div[contains(@class,'iframe-container')]//*[@name='Patient']");
+<<<<<<< HEAD
+    private final SelenideElement patientInfoFrameLoc = $x("//*[@name='frmPatientInfo']");
+=======
     private final SelenideElement patientInfo1FrameLoc = $x("//div[@id='frmPatientInfo1Parent']//*[@name='frmPatientInfo']");
     private final SelenideElement patientInfoFrameLoc = $x("//*[@name='frmPatientInfo']");
 
+>>>>>>> main
     private final SelenideElement chartNumber = $x("//div[@class='chart-item']");
     private final SelenideElement preferredPhone = $x("//input[@id='txtPtPreferredPhone']");
     private final ElementsCollection fullAddress = $$x("//div[contains(@fxlayout,'row') and @fxlayoutalign='start start']/div/div[4]/span");
@@ -68,7 +91,10 @@ public class PatientPageAdvancedMd {
     private void closeLastTab() {
         Set<String> windowHandles = WebDriverRunner.getWebDriver().getWindowHandles();
         List<String> handlesList = new ArrayList<>(windowHandles);
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
         if (handlesList.size() > 1) {
             String lastHandle = handlesList.get(handlesList.size() - 1);
             String mainWindowHandle = handlesList.get(handlesList.size() - 2);
@@ -115,7 +141,10 @@ public class PatientPageAdvancedMd {
                 : locator.getAttribute("data-returnvalue");
     }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
     private String getTextFromClipboard(@NonNull SelenideElement locator) {
         try {
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
@@ -134,25 +163,37 @@ public class PatientPageAdvancedMd {
     }
 
     public PatientPageAdvancedMd isMemosTabOpened() {
+<<<<<<< HEAD
+        AwaitUtil.awaitSafe(Duration.ofSeconds(4), Duration.ofMillis(150), () -> notesAndMemosFrameLocator, Matchers.is(false));
+=======
         switchTo().defaultContent();
         switchTo().frame(patientInfo1FrameLoc);
+>>>>>>> main
         switchTo().frame(notesAndMemosFrameLocator);
         memosDataContainer.shouldBe(exist);
         return this;
     }
 
     public PatientPageAdvancedMd isNotesTabOpened() {
+<<<<<<< HEAD
+        AwaitUtil.awaitSafe(Duration.ofSeconds(4), Duration.ofMillis(150), () -> notesAndMemosFrameLocator, Matchers.is(false));
+=======
         switchTo().defaultContent();
         switchTo().frame(patientInfo1FrameLoc);
+>>>>>>> main
         switchTo().frame(notesAndMemosFrameLocator);
         notesDataContainer.shouldBe(exist);
         return this;
     }
 
     public PatientPageAdvancedMd isChartFilesTabOpened() {
+<<<<<<< HEAD
+        switchTo().frame(notesAndMemosFrameLocator.shouldBe(exist));
+=======
         switchTo().defaultContent();
         switchTo().frame(patientInfo1FrameLoc);
         switchTo().frame(notesAndMemosFrameLocator);
+>>>>>>> main
         chartFilesDataContainer.shouldBe(exist);
         return this;
     }

@@ -1,23 +1,11 @@
 package regression;
 
 import com.codeborne.selenide.Selenide;
-import io.qameta.allure.Description;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.logging.LogEntry;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
 import page.object.portal.cases.HomePage;
-import page.object.portal.cases.LoginPage;
 import page.object.portal.cases.ModalPage;
 import page.object.portal.cases.WorkspacePage;
-import utils.WebDriverUtil;
-
-import java.util.List;
-
-import static utils.Config.USER_NAME;
-import static utils.Config.USER_PASSWORD;
-import static utils.WebDriverUtil.getBrowserLogs;
 
 @Slf4j
 public abstract class BaseAbstractTest {
@@ -28,19 +16,19 @@ public abstract class BaseAbstractTest {
     protected static String DOCUMENT_TITLE;
     protected final HomePage homePage = new HomePage();
 
-    @BeforeSuite(alwaysRun = true)
-    public void setupConfig() {
-        WebDriverUtil.initDriver();
-    }
+//    @BeforeSuite(alwaysRun = true)
+//    public void setupConfig() {
+//        WebDriverUtil.initDriver();
+//    }
 
-    @AfterSuite(alwaysRun = true)
-    public void deleteCase() {
-        new LoginPage().login(USER_NAME, USER_PASSWORD);
-        homePage
-                .archiveCase(COPIED_CASE_NAME)
-                .openArchivedTab()
-                .deleteCase(COPIED_CASE_NAME);
-    }
+//    @AfterSuite(alwaysRun = true)
+//    public void deleteCase() {
+//        new LoginPage().login(USER_NAME, USER_PASSWORD);
+//        homePage
+//                .archiveCase(COPIED_CASE_NAME)
+//                .openArchivedTab()
+//                .deleteCase(COPIED_CASE_NAME);
+//    }
 
     @AfterClass(alwaysRun = true)
     public void closeWebDriver() {
@@ -51,13 +39,13 @@ public abstract class BaseAbstractTest {
         }
     }
 
-    @Description("Verify console js errors")
-    public void verifyJSErrorInConsole() {
-        List<LogEntry> logs = getBrowserLogs();
-        for (LogEntry logEntry : logs) {
-            if (logEntry.getLevel().toString().equals("SEVERE")) {
-                log.error("Severe error: %s".formatted(logEntry.getMessage()));
-            }
-        }
-    }
+//    @Description("Verify console js errors")
+//    public void verifyJSErrorInConsole() {
+//        @NonNull List<String> logs = getBrowserLogs();
+//        for (String logEntry : logs) {
+//            if (logEntry.getLevel().toString().equals("SEVERE")) {
+//                log.error("Severe error: %s".formatted(logEntry.getMessage()));
+//            }
+//        }
+//    }
 }
