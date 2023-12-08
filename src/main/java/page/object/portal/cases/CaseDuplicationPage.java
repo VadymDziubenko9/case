@@ -91,7 +91,7 @@ public class CaseDuplicationPage extends BaseAbstractPage{
         log.info("Submit case duplication");
         createCaseDuplicateButton.shouldBe(enabled).click();
         caseDuplicateDialog.should(disappear).shouldNotBe(visible);
-        waitTillBubbleMessageShown("Case duplicate was created");
+        waitTillBubbleMessageShown("Case duplicate is created");
         closeAllBubbles();
         sleep(Duration.ofSeconds(5).toMillis()); //case document does not exist if there is no wait
     }

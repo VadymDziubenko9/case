@@ -147,13 +147,13 @@ public class ModalPage extends BaseAbstractPage{
     public void saveEpisode() {
         log.info("Saving episode");
         createEpisodeBtn.shouldBe(enabled).click();
-        waitTillBubbleMessagesShown("Episode was created", "Episode was updated");
+        waitTillBubbleMessagesShown("Episode is created", "Episode is updated");
         closeAllBubbles();
     }
 
     public void saveEpisodeOnEdit() {
         saveEpisodeBtn.shouldBe(enabled).click();
-        waitTillBubbleMessagesShown("Episode was created", "Episode was updated");
+        waitTillBubbleMessagesShown("Episode is created", "Episode is updated");
         closeAllBubbles();
     }
 
@@ -178,7 +178,7 @@ public class ModalPage extends BaseAbstractPage{
     public void deleteAllEpisodes() {
         while (episodeListItemLoc.isDisplayed()) {
             deleteEpisodeBtn.shouldBe(enabled).click();
-            waitTillBubbleMessageShown("Episode was deleted");
+            waitTillBubbleMessageShown("Episode is deleted");
             closeAllBubbles();
         }
     }

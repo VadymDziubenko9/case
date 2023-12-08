@@ -1,4 +1,4 @@
-package regression;
+package smoke;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
@@ -14,6 +14,7 @@ import static utils.Config.USER_PASSWORD;
 
 public class PageColorAdditionTest extends BaseAbstractTest {
     private static final String RED_COLOR = "red";
+    private static final String BLUE_GREY_COLOR = "blueGrey";
 
     @BeforeClass(alwaysRun = true)
     public void login() {
@@ -37,7 +38,8 @@ public class PageColorAdditionTest extends BaseAbstractTest {
             softAssertions.assertThat(workspacePage.getPageColor(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
                     .as("Color is not displayed on File view")
                     .isEqualTo(RED_COLOR);
-            MAIN_STAPLE_PAGE = 76;
+
+            MAIN_STAPLE_PAGE = 26;
             openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
             workspacePage.setModalPageColor(RED_COLOR);
 
@@ -49,7 +51,8 @@ public class PageColorAdditionTest extends BaseAbstractTest {
             softAssertions.assertThat(workspacePage.getPageColor(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
                     .as("Color is not displayed on File view")
                     .isEqualTo(RED_COLOR);
-            MAIN_STAPLE_PAGE = 104;
+
+            MAIN_STAPLE_PAGE = 76;
             openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
             workspacePage.setModalPageColor(RED_COLOR);
 
@@ -78,7 +81,9 @@ public class PageColorAdditionTest extends BaseAbstractTest {
 
         modalPage.closeModalView();
         assertThat(workspacePage.getPageColor(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
-                .as("Color is not displayed on File view");
+                .as("Color is not displayed on File view")
+                .isEqualTo(RED_COLOR);
+        ;
 
     }
 
@@ -129,6 +134,19 @@ public class PageColorAdditionTest extends BaseAbstractTest {
             softAssertions.assertThat(workspacePage.getPageColor(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
                     .as("Color is not displayed on File view")
                     .isEqualTo(RED_COLOR);
+
+            MAIN_STAPLE_PAGE = 104;
+            openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
+            workspacePage.setModalPageColor(BLUE_GREY_COLOR);
+
+            softAssertions.assertThat(workspacePage.getModalPageColor())
+                    .as("Color is not displayed on Modal view")
+                    .isEqualTo(BLUE_GREY_COLOR);
+            modalPage.closeModalView();
+
+            softAssertions.assertThat(workspacePage.getPageColor(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
+                    .as("Color is not displayed on File view")
+                    .isEqualTo(BLUE_GREY_COLOR);
         });
     }
 

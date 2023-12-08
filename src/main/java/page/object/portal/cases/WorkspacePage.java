@@ -16,7 +16,6 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static utils.JsUtil.waitForDomToLoad;
 
 @Slf4j
 public class WorkspacePage extends BaseAbstractPage{
@@ -54,7 +53,6 @@ public class WorkspacePage extends BaseAbstractPage{
             pageCardsLoc.get(index)
                     .scrollIntoView("{behavior: \"instant\", block: \"end\", inline: \"end\"}");
             closePreviewModalIfShown();
-            waitForDomToLoad();
             index++;
         } while (index < pageCardsLoc.size() && !$x(PAGE_CARD_LOC.formatted(title, pageNumber)).is(enabled));
         $x(PAGE_CARD_LOC.formatted(title, pageNumber)).shouldBe(visible).click();
@@ -75,7 +73,7 @@ public class WorkspacePage extends BaseAbstractPage{
         unCheckPageColors();
         pageColorConfirmDialog.$x(".//div[@data-action-box-color='%s']".formatted(color)).click();
         saveColorButton.shouldBe(enabled).click();
-        waitTillBubbleMessagesShown("Page colors was updated", "Page colors was removed");
+        waitTillBubbleMessagesShown("Page colors are updated", "Page colors are removed");
         closeAllBubbles();
         return this;
     }
@@ -83,10 +81,10 @@ public class WorkspacePage extends BaseAbstractPage{
     @Step("Reset page color")
     public void unCheckPageColors() {
         log.info("Unsetting page colors");
-        AwaitUtil.awaitSafe(Duration.ofSeconds(4), Duration.ofSeconds(2), selectedColorElements::isEmpty, Matchers.is(false));
+        AwaitUtil.awaitSafe(Duration.ofSeconds(3), Duration.ofMillis(500), selectedColorElements::isEmpty, Matchers.is(false));
         while (!selectedColorElements.isEmpty()) {
             actions().moveToElement(selectedColorLoc).click().perform();
-            sleep(1000);
+            sleep(500);
         }
     }
 
@@ -105,7 +103,7 @@ public class WorkspacePage extends BaseAbstractPage{
         log.info("Setting up {} page color due Modal view", color);
         unCheckPageColors();
         $x(MODAL_ACTION_BOX_COLOR.formatted(color)).shouldBe(visible).click();
-        waitTillBubbleMessagesShown("Page colors was updated", "Page colors was removed");
+        waitTillBubbleMessagesShown("Page colors are updated", "Page colors are removed");
         closeAllBubbles();
         return new ModalPage();
     }

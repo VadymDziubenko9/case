@@ -22,7 +22,6 @@ import static utils.JsUtil.waitForDomToLoad;
 @Slf4j
 public class HomePage extends BaseAbstractPage{
     private static final String ACTION_BUTTON = "//button[@data-action-button='%s']";
-    private static final String ACTION_TAB_BUTTON = "//button[@data-action-button-tab='%s']";
     private static final String SCROLL_TO_PARAMETER = "{block: \"center\", inline: \"start\"}";
     private static final String SELECTED_CASE_TAB_LOC = "//a[contains(@href,'%s') and @aria-selected='true']";
     private static final String PAGE_LOC_BY_NUMBER = "//div[contains(@class,'card-page-wrapper')]/div[@data-document-page-number='%d']";
@@ -33,9 +32,17 @@ public class HomePage extends BaseAbstractPage{
     private static final String DROP_DOWN_LIST_VALUE_LOC = "//ul/li[contains(@name,'%s')]";
     private static final String FIRST_PAGE_IN_STAPLE_BY_PAGE_NUM = "//div[contains(@class,'card-page-wrapper')]/div[@data-document-page-number='%d' and @data-page-staple-order='1']";
     private static final String CASE_CONTAINER_LOC = "//div[contains(@class,'MuiPaper-root') and .//a[contains(text(),'%s')]]";
+
     private static final String ACTIVE_CASES_TAB_LOC = "//div[contains(@class,'MuiToolbar-dense') and .//button[contains(@data-action-button-tab,'%s') and @aria-selected='true']]";
+    private static final String ACTION_TAB_BUTTON = "//button[@data-action-button-tab='%s']";
+
     private static final String CASE_CONTEXT_MENU_BTN = "//button[contains(@data-action-button,'caseDropdown')]";
     private static final String HOME_PAGE_CONTEXT_MENU_LIST = "//ul[contains(@role,'menu')]//*[@data-action-menu-item='%s']";
+
+
+    private final SelenideElement archivedTabBtnLoc = $x(ACTION_TAB_BUTTON.formatted("archived"));
+    private final SelenideElement openCaseTabLoc = $x(ACTIVE_CASES_TAB_LOC.formatted("open"));
+    private final SelenideElement archivedCaseTabLoc = $x(ACTIVE_CASES_TAB_LOC.formatted("archived"));
 
     private final SelenideElement deleteCaseDialogLoc = $x("//div[contains(@role, 'dialog') and .//*[normalize-space()='Are you absolutely sure ?']]");
     private final SelenideElement submitCaseDeleteBtn = $x("//button[@data-action-button='submitDeleteCaseDialog']");
@@ -45,7 +52,6 @@ public class HomePage extends BaseAbstractPage{
     private final SelenideElement caseContextMenuList = $x("//ul[contains(@class,'MuiList-root') and @role='menu']");
     private final SelenideElement caseDuplicateDialog = $x("//form[contains(@role,'dialog') and .//text()='Create case duplicate']");
     private final SelenideElement caseProcessingStatus = $x("//div[@title]/h6");
-    private final SelenideElement userAvatarLocator = $x("//div[contains(@class,'MuiButtonBase-root')]//span[contains(@class,'MuiChip-label')]");
     private final SelenideElement documentElementContainer = $x("//li[contains(@class,'MuiListItem-container')]");
     private final SelenideElement documentSearchInput = $x("//div[@data-control-input='search']//input");
     private final SelenideElement noPagesInToWorkspaceLoc = $x("//p[text()='No page(s) in workspace']");
@@ -57,9 +63,10 @@ public class HomePage extends BaseAbstractPage{
     private final SelenideElement pageCardPreviewLoc = $x("//div[contains(@class,'card-page-preview')]");
     private final SelenideElement removePageFromWorkspaceBtn = $x(ACTION_BUTTON.formatted("removePageFromWorkspace"));
     private final SelenideElement homeContextMenuBtn = $x("//div[contains(@class,'MuiChip-root') and @role='button']");
+    private final SelenideElement casePortalLogoLoc = $x("//header//div[contains(@class,'MuiToolbar-root') and .//@alt='Case Chronology - Case Portal']");
 
     private final ElementsCollection authorRegistryItems = $$x("//div[contains(@class,'MuiContainer-root')]//ul/li");
-    private final ElementsCollection pageCardImageLocator = $$x("//img[@class='card-page-image-body']");
+    private final ElementsCollection pageCardImageLocator = $$x("//img[@class='card-page-image']");
     private final ElementsCollection caseDocumentsTitles = $$x("//ul[contains(@class,'MuiList-root')]//*[contains(@data-scroll-id,'document')]");
     private final ElementsCollection documentsList = $$x("//ul[contains(@class,'MuiList-root')]/li");
     private final ElementsCollection stapledIcon = $$x("//i[contains(@class, 'icon-stapled')]");
@@ -85,13 +92,13 @@ public class HomePage extends BaseAbstractPage{
     public HomePage openHomePage() {
         log.info("Open cases home page");
         open(BASE_URL);
-        verifyPageIsLoaded();
+        verifyIsUserLoadedIn();
         return this;
     }
 
-    public HomePage verifyPageIsLoaded() {
-        userAvatarLocator.shouldBe(visible);
-        $x(ACTIVE_CASES_TAB_LOC.formatted("open")).shouldBe(visible);
+    public HomePage verifyIsUserLoadedIn() {
+        openCaseTabLoc.shouldBe(visible);
+        casePortalLogoLoc.shouldBe(visible);
         return this;
     }
 
@@ -118,7 +125,7 @@ public class HomePage extends BaseAbstractPage{
     public List<Document> getParsedDocuments() {
         log.info("Parsing of document");
         return caseDocumentsTitles.shouldHave(CollectionCondition.sizeGreaterThan(0)).asFixedIterable().stream().map(element -> {
-            var title = element.$x(".//span[contains(@class,'MuiTypography-subtitle')]").text();
+            var title = element.$x(".//span[contains(@class,'MuiTypography-subtitle')]").text().trim();
             var numPages = element.$x(".//p[contains(@class,'MuiTypography-body')]/span").getText().replace("page(s)", "").trim();
             var processingStatus = element.getAttribute("data-document-status");
             return Document.builder().title(title).numPages(Integer.parseInt(numPages)).status(processingStatus).build();
@@ -145,9 +152,9 @@ public class HomePage extends BaseAbstractPage{
         return this;
     }
 
-    @Step("Open {0} document")
+    @Step("Open document")
     public HomePage openDocument(@NonNull String title) {
-        log.info("Open {0} document");
+        log.info("Open {} document", title);
         searchDocument(title);
         documentElementContainer.$x(".//a[contains(@data-document-status,'ready') and .//text()='%s']".formatted(title)).click();
         pageCardImageLocator.shouldHave(CollectionCondition.sizeGreaterThan(0));
@@ -168,8 +175,8 @@ public class HomePage extends BaseAbstractPage{
     }
 
     public HomePage openArchivedTab() {
-        $x(ACTION_TAB_BUTTON.formatted("archived")).click();
-        $x(ACTIVE_CASES_TAB_LOC.formatted("archived")).should(appear).shouldBe(visible);
+        archivedTabBtnLoc.shouldBe(enabled).click();
+        archivedCaseTabLoc.should(appear).shouldBe(visible);
         return this;
     }
 
@@ -188,7 +195,7 @@ public class HomePage extends BaseAbstractPage{
         while (!noPagesInToWorkspaceLoc.isDisplayed()) {
             pageCardsLoc.shouldHave(CollectionCondition.sizeGreaterThan(0));
             removePageFromWorkspaceBtn.shouldBe(visible).shouldBe(enabled).click();
-            waitTillBubbleMessageShown("Page was removed from workspace");
+            waitTillBubbleMessageShown("Page is removed from workspace");
             closeAllBubbles();
         }
     }
@@ -223,7 +230,7 @@ public class HomePage extends BaseAbstractPage{
     public void saveStaple() {
         log.info("Save staple");
         saveStapleBtn.shouldBe(enabled).click();
-        waitTillBubbleMessagesShown("Staple was created", "Staple was updated");
+        waitTillBubbleMessagesShown("Staple is created", "Staple is updated");
         closeAllBubbles();
     }
 
@@ -268,7 +275,7 @@ public class HomePage extends BaseAbstractPage{
         scrollToParticularPage(mainPage);
         deleteStapleButton.shouldBe(exist).click();
         confirmAction("Delete staple from pages");
-        waitTillBubbleMessagesShown("Staple was removed", "Staple was updated");
+        waitTillBubbleMessagesShown("Staple is removed", "Staple is updated");
         closeAllBubbles();
         return this;
     }
@@ -292,7 +299,7 @@ public class HomePage extends BaseAbstractPage{
         log.info("Add page {} into Workspace", pageNum);
         scrollToParticularPage(pageNum);
         $x(PAGE_LOC_BY_NUMBER.formatted(pageNum) + ACTION_BUTTON.formatted("addPageToWorkspace")).shouldBe(visible).click();
-        waitTillBubbleMessageShown("Page was added to workspace");
+        waitTillBubbleMessageShown("Page is added to workspace");
         closeAllBubbles();
     }
 
@@ -309,7 +316,7 @@ public class HomePage extends BaseAbstractPage{
         deleteCaseDialogLoc.shouldBe(appear);
         $x("//input[@name='caseName']").sendKeys(title);
         submitCaseDeleteBtn.shouldBe(enabled).click();
-        waitTillBubbleMessageShown("Case was deleted");
+        waitTillBubbleMessageShown("Case is deleted");
         closeAllBubbles();
         deleteCaseDialogLoc.should(disappear);
     }
@@ -325,7 +332,7 @@ public class HomePage extends BaseAbstractPage{
     private static void confirmCaseArchive(String title) {
         $x(CASE_CONTAINER_LOC.formatted(title) + CASE_CONTEXT_MENU_BTN).shouldBe(enabled).click();
         $x(DROP_DOWN_LIST_VALUE_LOC.formatted("Archive case")).shouldBe(visible).click();
-        waitTillBubbleMessageShown("Case was archived");
+        waitTillBubbleMessageShown("Case is archived");
         closeAllBubbles();
     }
 
@@ -342,7 +349,7 @@ public class HomePage extends BaseAbstractPage{
     private void waitUntilPageCardIsLoading() {
         closePreviewModalIfShown();
         pageCardImageLocator.shouldHave(CollectionCondition.sizeGreaterThan(0))
-                .first()
+                .get(pageCardImageLocator.size() / 2)
                 .should(appear)
                 .shouldBe(visible);
     }

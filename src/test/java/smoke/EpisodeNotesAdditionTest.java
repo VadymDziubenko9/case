@@ -1,4 +1,4 @@
-package regression;
+package smoke;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;

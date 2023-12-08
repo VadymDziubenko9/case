@@ -1,14 +1,15 @@
 package utils;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.Step;
 import io.qameta.allure.selenide.AllureSelenide;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.logging.LogEntry;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import static com.codeborne.selenide.FileDownloadMode.FOLDER;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static io.qameta.allure.selenide.LogType.*;
 import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.SEVERE;
 import static org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT_AND_NOTIFY;
 import static org.openqa.selenium.remote.CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR;
 
@@ -35,8 +37,8 @@ public class WebDriverUtil {
         getWebDriver().manage().deleteAllCookies();
     }
 
-    public static List<LogEntry> getBrowserLogs() {
-        return getWebDriver().manage().logs().get("browser").getAll();
+    public static @NonNull List<String> getBrowserLogs() {
+        return Selenide.getWebDriverLogs("browser", SEVERE);
     }
 
     @Step("Driver Initialization")

@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum TagOps {
     LEGAL("Legal"),
     BILLS("Bills"),
+    MISC("Misc"),
     NO_TAG("noTag");
 
     private final String name;

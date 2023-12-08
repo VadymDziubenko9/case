@@ -1,4 +1,4 @@
-package regression;
+package smoke;
 
 import io.qameta.allure.Description;
 import org.assertj.core.api.SoftAssertions;
@@ -14,16 +14,15 @@ public class LoginTest extends BaseAbstractTest {
     @Description("Verify that user is able to login in to the Case Portal")
     public void verifyLogin() {
         loginPage.login(USER_NAME, USER_PASSWORD);
-//        verifyJSErrorInConsole();
 
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(loginPage.verifyLoggedInUserName())
+            softAssertions.assertThat(loginPage.getLoggedInUserName())
                     .as("Wrong username is displaying after logged in")
                     .isEqualTo("Otto von Bismarck");
 
             softAssertions.assertThat(loginPage.getCurrentUrl())
                     .as("Wrong url is displaying after logged in")
-                    .isEqualTo(BASE_URL + "admin/cases");
+                    .isEqualTo(BASE_URL + "/admin/cases");
         });
     }
 }

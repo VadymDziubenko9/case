@@ -1,4 +1,4 @@
-package regression;
+package smoke;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
@@ -7,8 +7,7 @@ import org.testng.annotations.Test;
 import page.object.portal.cases.LoginPage;
 
 import static constants.DocumentConstants.*;
-import static enums.TagOps.BILLS;
-import static enums.TagOps.LEGAL;
+import static enums.TagOps.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.Config.USER_NAME;
 import static utils.Config.USER_PASSWORD;
@@ -17,7 +16,6 @@ import static widgets.TagWidget.setPageTagOnModalView;
 
 public class PageTagAdditionTest extends BaseAbstractTest {
     private static final String LEGAL_LABEL = LEGAL.getName();
-    private static int MAIN_STAPLE_PAGE = 1;
 
     @BeforeClass(alwaysRun = true)
     public void login() {
@@ -41,6 +39,7 @@ public class PageTagAdditionTest extends BaseAbstractTest {
     @Test
     @Description("Verify page tag addition for 13153612.pdf document")
     public void verifyPageTagAdditionFor13153612() {
+        MAIN_STAPLE_PAGE = 1;
         DOCUMENT_TITLE = DOCUMENT_13153612_PDF.getTitle();
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
         setPageTagOnModalView(LEGAL_LABEL.toLowerCase());
@@ -52,21 +51,23 @@ public class PageTagAdditionTest extends BaseAbstractTest {
     }
 
     @Test
-    @Description("Verify page tag addition for John Davis , M.D. - 4.7.22.pdf document")
-    public void verifyPageTagAdditionForJohnDavis() {
-        DOCUMENT_TITLE = JOHN_DAVIS_PDF.getTitle();
+    @Description("Verify page tag addition for Smith Demo Fishing.pdf document")
+    public void verifyPageTagAdditionForSmithFishing() {
+        MAIN_STAPLE_PAGE = 1;
+        DOCUMENT_TITLE = SMITH_DEMO_FISHING_PDF.getTitle();
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
-        setPageTagOnModalView(LEGAL_LABEL.toLowerCase());
+        setPageTagOnModalView(MISC.getName().toLowerCase());
         modalPage.closeModalView();
 
         assertThat(getDocumentPageTag(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
                 .as("Tag should be correctly shown on page card in the file view after edit")
-                .isEqualTo(LEGAL_LABEL);
+                .isEqualTo(MISC.getName());
     }
 
     @Test
     @Description("Verify page tag addition for Robert Chase - 03.31.22.pdf document")
     public void verifyPageTagAdditionForRobertChase() {
+        MAIN_STAPLE_PAGE = 1;
         DOCUMENT_TITLE = ROBERT_CHASE_PDF.getTitle();
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
         setPageTagOnModalView(LEGAL_LABEL.toLowerCase());
@@ -80,6 +81,7 @@ public class PageTagAdditionTest extends BaseAbstractTest {
     @Test
     @Description("Verify page tag addition for John Smith - 3.29.22_v2.pdf document")
     public void verifyPageTagAdditionForJohnSmith() {
+        MAIN_STAPLE_PAGE = 1;
         DOCUMENT_TITLE = JOHN_SMITH_V_2_PDF.getTitle();
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
         setPageTagOnModalView(LEGAL_LABEL.toLowerCase());
@@ -98,5 +100,4 @@ public class PageTagAdditionTest extends BaseAbstractTest {
                 .openWorkspace()
                 .openPageCardInWorkspace(documentTitle, pageNumber);
     }
-
 }

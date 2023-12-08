@@ -9,9 +9,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import page.object.portal.cases.AuthorRegistryPage;
 import page.object.portal.cases.LoginPage;
+import smoke.BaseAbstractTest;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static constants.DocumentConstants.SMITH_DEMO_EASTER_PDF;
+import static constants.DocumentConstants.SMITH_DEMO_FISHING_PDF;
 import static constants.EpisodeConstants.SMITH_DEMO_EASTER_EPISODE;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static utils.Config.*;
@@ -20,8 +21,8 @@ import static utils.Config.*;
 public class AuthorRegistryTest extends BaseAbstractTest {
     private final AuthorRegistryPage authorRegistryTest = new AuthorRegistryPage();
     private static final String AUTHOR_NAME = SMITH_DEMO_EASTER_EPISODE.getAuthor();
-    private static final String DOCUMENT_TITLE = SMITH_DEMO_EASTER_PDF.getTitle();
-    private static final int DOCUMENT_PAGE = SMITH_DEMO_EASTER_PDF.getNumPages();
+    private static final String DOCUMENT_TITLE = SMITH_DEMO_FISHING_PDF.getTitle();
+    private static final int DOCUMENT_PAGE = SMITH_DEMO_FISHING_PDF.getNumPages();
 
     @BeforeClass(alwaysRun = true)
     public void login() {

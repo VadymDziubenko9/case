@@ -1,4 +1,4 @@
-package regression;
+package smoke;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
@@ -74,7 +74,8 @@ public class PageAdditionToWorkspaceTest extends BaseAbstractTest {
                     .openPageCardInWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 47);
 
         assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
-                .as("Include page in to workspace toggle unchecked");
+                .as("Include page in to workspace toggle unchecked")
+                .isTrue();
 
     }
 

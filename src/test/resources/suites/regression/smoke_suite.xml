@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Smoke Suite" verbose="1">
+    <listeners>
+        <listener class-name="listeners.AttachmentListener"/>
+    </listeners>
+
+    <test name="Regression test">
+        <classes>
+            <class name="smoke.LoginTest"/>
+            <class name="smoke.CaseDuplicateTest"/>
+            <class name="smoke.PageAdditionToWorkspaceTest"/>
+            <class name="smoke.PageStaplingTest"/>
+            <class name="smoke.BasicEpisodeDataPopulationTest"/>
+            <class name="smoke.EpisodeNotesAdditionTest"/>
+            <class name="smoke.PageColorAdditionTest"/>
+            <class name="smoke.PageTagAdditionTest"/>
+            <class name="smoke.PagesFilteringTest"/>
+        </classes>
+    </test>
+</suite>

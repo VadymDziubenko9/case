@@ -34,7 +34,7 @@ public class AuthorRegistryPage {
     public AuthorRegistryPage markAuthorVerified(String authorName) {
         expandAuthorContextMenu(authorName);
         $x(DROP_DOWN_CONTEXT_MENU_LIST.formatted("markVerifiedAuthor")).click();
-        waitTillBubbleMessageShown("Episode author was updated");
+        waitTillBubbleMessageShown("Episode author is updated");
         closeAllBubbles();
         return this;
     }
@@ -51,7 +51,7 @@ public class AuthorRegistryPage {
         searchAuthor(name);
         expandAuthorContextMenu(name);
         $x(DROP_DOWN_CONTEXT_MENU_LIST.formatted("deleteAuthor")).click();
-        waitTillBubbleMessageShown("Episode author was deleted");
+        waitTillBubbleMessageShown("Episode author is deleted");
         closeAllBubbles();
     }
 

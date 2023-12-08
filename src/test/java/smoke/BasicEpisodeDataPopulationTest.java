@@ -1,4 +1,4 @@
-package regression;
+package smoke;
 
 import dto.Episode;
 import io.qameta.allure.Description;

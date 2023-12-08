@@ -25,11 +25,11 @@ public class AwaitUtil {
                 .until(supplier, matcher);
     }
 
-    private static <T> T awaitBase(Duration duration, final Callable<T> supplier,
-                                   final Predicate<? super T> predicate, final String alias) {
-        return Awaitility.await(alias)
+    private static <T> T awaitBase(final Callable<T> supplier,
+                                   final Predicate<? super T> predicate) {
+        return Awaitility.await(AwaitUtil.POLL_MESSAGE)
                 .pollInSameThread()
-                .atMost(duration)
+                .atMost(AwaitUtil.MAX_TIME)
                 .pollInterval(POLL_INTERVAL)
                 .until(supplier, predicate);
     }
@@ -75,7 +75,7 @@ public class AwaitUtil {
     }
 
     public static <T> T await(final Callable<T> supplier, final Predicate<? super T> predicate) {
-        return awaitBase(MAX_TIME, supplier, predicate, POLL_MESSAGE);
+        return awaitBase(supplier, predicate);
     }
 
 }

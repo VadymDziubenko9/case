@@ -4,11 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.Matchers;
 import page.object.portal.cases.BaseAbstractPage;
-import utils.AwaitUtil;
-
-import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$x;
@@ -20,13 +16,13 @@ public class TagWidget extends BaseAbstractPage {
     private final String PAGE_CARD_SET_TAG_BUTTON = "//div[contains(@class,'cp-head')]//div[@role='button']";
     private final String SELECTED_TAG_VIEW = ".//div[@data-action-chip='%s']//..//div[@data-active-chip='true']";
     private final String TAG_ACTION = ".//div[@data-action-chip='%s']";
-    private final String GET_SELECTED_TAG_VALUE = ".//div[@data-active-chip='true']";
-    private final String UPDATED_CONFIRM = "Page tag was updated";
-    private final String REMOVED_CONFIRM = "Page tag was removed";
+    private final String UPDATED_CONFIRM = "Page tag is updated";
+    private final String REMOVED_CONFIRM = "Page tag is removed";
 
     private final SelenideElement modalViewContainerLoc = $x("//div[contains(@class,'MuiDialogContent-root')]");
     private final SelenideElement pageTagConfirmDialog = $x("//div[contains(@role,'dialog') and .//text()='Set page tag']");
     private final SelenideElement saveTagButton = $x("//button[contains(text(),'Save')]");
+    private final SelenideElement anySelectedTagLoc = $x("//div[@data-active-chip='true']");
 
     @Step("Set tag {1} to the page {0} on file view")
     public void setPageTag(int pageNum, String tag, String title) {
@@ -59,27 +55,25 @@ public class TagWidget extends BaseAbstractPage {
     @Step("Set tag {0} on modal view")
     public void setPageTagOnModalView(String tag) {
         log.info("Setting {} page tag on Modal view", tag);
-        if ($x(SELECTED_TAG_VIEW.formatted(tag)).isDisplayed()) {
-            $x(GET_SELECTED_TAG_VALUE).shouldBe(enabled).click();
-            waitTillBubbleMessagesShown(UPDATED_CONFIRM, REMOVED_CONFIRM);
-            closeAllBubbles();
-        }
-        AwaitUtil.awaitSafe(Duration.ofSeconds(4), Duration.ofSeconds(2), () -> $x(GET_SELECTED_TAG_VALUE).isDisplayed(), Matchers.is(false));
-        modalViewContainerLoc.$x(TAG_ACTION.formatted(tag)).should(enabled).shouldBe(visible).click();
+        unselectTagIfSelected();
+        modalViewContainerLoc.$x(TAG_ACTION.formatted(tag)).shouldBe(visible).click();
         modalViewContainerLoc.$x(SELECTED_TAG_VIEW.formatted(tag)).should(appear).shouldBe(visible);
         waitTillBubbleMessagesShown(UPDATED_CONFIRM, REMOVED_CONFIRM);
         closeAllBubbles();
     }
 
-    public String getDocumentPageTag(String title, int page) {
-        return $x(PAGE_LOC_BY_NUMBER.formatted(title, page) + PAGE_CARD_SET_TAG_BUTTON).should(appear).getText();
+    private static void unselectTagIfSelected() {
+        if (anySelectedTagLoc.isDisplayed()) {
+            while (anySelectedTagLoc.isDisplayed()) {
+                anySelectedTagLoc.click();
+                waitTillBubbleMessagesShown(UPDATED_CONFIRM, REMOVED_CONFIRM);
+                closeAllBubbles();
+            }
+        }
     }
 
-    public String getPageTag() {
-        var item = modalViewContainerLoc.$x(GET_SELECTED_TAG_VALUE);
-        if (modalViewContainerLoc.$x(GET_SELECTED_TAG_VALUE).isDisplayed()) {
-            return item.getText();
-        } else return null;
+    public String getDocumentPageTag(String title, int page) {
+        return $x(PAGE_LOC_BY_NUMBER.formatted(title, page) + PAGE_CARD_SET_TAG_BUTTON).should(appear).getText();
     }
 
     @Step("Remove tag from page {0}")
@@ -87,11 +81,11 @@ public class TagWidget extends BaseAbstractPage {
         log.info("Remove tag from page #{}", page);
             if ($x(PAGE_LOC_BY_NUMBER.formatted(title, page) + PAGE_CARD_SET_TAG_BUTTON).isDisplayed()) {
                 openPageTagPopup(title, page);
-                pageTagConfirmDialog.$x(GET_SELECTED_TAG_VALUE).shouldBe(enabled).click();
+                anySelectedTagLoc.shouldBe(enabled).click();
                 saveTagButton.click();
-        }
-        waitTillBubbleMessagesShown(UPDATED_CONFIRM, REMOVED_CONFIRM);
-        closeAllBubbles();
+                waitTillBubbleMessagesShown(UPDATED_CONFIRM, REMOVED_CONFIRM);
+                closeAllBubbles();
+            }
     }
 }
 
