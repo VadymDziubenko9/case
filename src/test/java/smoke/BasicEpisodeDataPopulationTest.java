@@ -30,14 +30,12 @@ public class BasicEpisodeDataPopulationTest extends BaseAbstractTest {
         createEpisode(DOCUMENT_13153612_PDF.getTitle(), EPISODE_13153612, MAIN_STAPLE_PAGE);
         modalPage.ifNotParentMarkAsParent(EPISODE_13153612);
 
-        assertThat(modalPage.parseEpisode())
-                    .as("Episode data should properly displayed")
-                    .isEqualTo(EPISODE_13153612);
+        assertThat(modalPage.parseEpisode()).as("Episode data should properly displayed").isEqualTo(EPISODE_13153612);
 
         assertThat(modalPage.isPreEventToggleSelected())
-                    .as("Episode shouldn't be selected if episode date bigger than event")
-                    .isFalse();
-            modalPage.closeModalView();
+                .as("Episode shouldn't be selected if episode date bigger than event")
+                .isFalse();
+        modalPage.closeModalView();
     }
 
     @Test
@@ -204,13 +202,13 @@ public class BasicEpisodeDataPopulationTest extends BaseAbstractTest {
         modalPage.ifNotParentMarkAsParent(ROBERT_CHASE_EPISODE);
 
         assertThat(modalPage.parseEpisode())
-                    .as("Episode data should properly displayed")
-                    .isEqualTo(ROBERT_CHASE_EPISODE);
+                .as("Episode data should properly displayed")
+                .isEqualTo(ROBERT_CHASE_EPISODE);
 
         assertThat(modalPage.isPreEventToggleSelected())
-                    .as("Episode shouldn't be selected if episode date bigger than event")
-                    .isFalse();
-            modalPage.closeModalView();
+                .as("Episode shouldn't be selected if episode date bigger than event")
+                .isFalse();
+        modalPage.closeModalView();
     }
 
     @Test
@@ -289,13 +287,13 @@ public class BasicEpisodeDataPopulationTest extends BaseAbstractTest {
         modalPage.ifNotParentMarkAsParent(JOHN_SMITH_EPISODE);
 
         assertThat(modalPage.parseEpisode())
-                    .as("Episode data should properly displayed")
-                    .isEqualTo(JOHN_SMITH_EPISODE);
+                .as("Episode data should properly displayed")
+                .isEqualTo(JOHN_SMITH_EPISODE);
 
         assertThat(modalPage.isPreEventToggleSelected())
-                    .as("Episode shouldn't be selected if episode date bigger than event")
-                    .isFalse();
-            modalPage.closeModalView();
+                .as("Episode shouldn't be selected if episode date bigger than event")
+                .isFalse();
+        modalPage.closeModalView();
     }
 
     @Test(description = "Verify basic episode data population for Smith Demo Fishing.pdf document")
@@ -306,18 +304,18 @@ public class BasicEpisodeDataPopulationTest extends BaseAbstractTest {
         modalPage.ifNotParentMarkAsParent(FISHING_SINGLE_EPISODE);
 
         assertThat(modalPage.parseEpisode())
-                    .as("Episode data should properly displayed")
-                    .isEqualTo(FISHING_SINGLE_EPISODE);
+                .as("Episode data should properly displayed")
+                .isEqualTo(FISHING_SINGLE_EPISODE);
 
         assertThat(modalPage.isPreEventToggleSelected())
-                    .as("Episode shouldn't be selected if episode date bigger than event")
-                    .isFalse();
-            modalPage.closeModalView();
+                .as("Episode shouldn't be selected if episode date bigger than event")
+                .isFalse();
+        modalPage.closeModalView();
     }
 
     @Step("Create page {1} episode on {2} page in {0} document")
     private void createEpisode(String documentTitle, Episode episode, int number) {
-        log.info("Create {1} episode on {2} page number and for {0} document");
+        log.info("Create {} episode on {} page number and for {} document", episode, number, documentTitle);
         homePage
                 .openHomePage()
                 .openCase(COPIED_CASE_NAME)

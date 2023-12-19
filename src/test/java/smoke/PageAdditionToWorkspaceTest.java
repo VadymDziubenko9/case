@@ -21,10 +21,19 @@ public class PageAdditionToWorkspaceTest extends BaseAbstractTest {
     @Test
     @Description("Verify page addition in to the Workspace for StrongHealth Carrollwood (138).pdf document")
     public void verifySinglePageAdditionToWorkspaceForCarrollWood() {
+        addPageToWorkspace(STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(), 8);
+        homePage
+                .openWorkspace()
+                .openPageInWorkspace(STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(), 8);
+
+        assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
+                .as("Include page in to workspace toggle unchecked")
+                .isTrue();
+
         addPageToWorkspace(STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(), 12);
         homePage
                 .openWorkspace()
-                .openPageCardInWorkspace(STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(), 12);
+                .openPageInWorkspace(STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(), 12);
 
         assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
                 .as("Include page in to workspace toggle unchecked")
@@ -37,7 +46,7 @@ public class PageAdditionToWorkspaceTest extends BaseAbstractTest {
         addPageToWorkspace(BESTSIDE_MEDICAL_GROUP_PDF.getTitle(), 14);
         homePage
                 .openWorkspace()
-                .openPageCardInWorkspace(BESTSIDE_MEDICAL_GROUP_PDF.getTitle(), 14);
+                .openPageInWorkspace(BESTSIDE_MEDICAL_GROUP_PDF.getTitle(), 14);
 
         assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
                 .as("Include page in to workspace toggle unchecked")
@@ -50,7 +59,7 @@ public class PageAdditionToWorkspaceTest extends BaseAbstractTest {
         addPageToWorkspace(SMITH_DEMO_FISHING_PDF.getTitle(), 1);
         homePage
                 .openWorkspace()
-                .openPageCardInWorkspace(SMITH_DEMO_FISHING_PDF.getTitle(), 1);
+                .openPageInWorkspace(SMITH_DEMO_FISHING_PDF.getTitle(), 1);
 
         assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
                 .as("Include page in to workspace toggle unchecked")
@@ -63,15 +72,15 @@ public class PageAdditionToWorkspaceTest extends BaseAbstractTest {
         addPageToWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 8);
         homePage
                 .openWorkspace()
-                .openPageCardInWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 8);
+                .openPageInWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 8);
 
         assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
-                    .as("Include page in to workspace toggle unchecked")
-                    .isTrue();
-            addPageToWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 47);
-            homePage
-                    .openWorkspace()
-                    .openPageCardInWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 47);
+                .as("Include page in to workspace toggle unchecked")
+                .isTrue();
+        addPageToWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 47);
+        homePage
+                .openWorkspace()
+                .openPageInWorkspace(CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(), 47);
 
         assertThat(modalPage.isIncludePageIntoWorkspaceSelected())
                 .as("Include page in to workspace toggle unchecked")

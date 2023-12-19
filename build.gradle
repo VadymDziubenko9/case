@@ -88,6 +88,6 @@ dependencies {
 tasks.register("baseRegressionRun", Test){
     systemProperties(System.getProperties())
     useTestNG() {
-        suites("./src/test/resources/suites/regression/regression_suite.xml")
+        suites("./src/test/resources/suites/smoke/smoke_suite.xml")
     }
 }

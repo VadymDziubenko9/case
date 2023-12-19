@@ -147,4 +147,12 @@ public class EpisodeConstants {
     private @NonNull String generateName() {
         return RandomStringUtils.random(5, true, false).toUpperCase();
     }
+
+    public static final String DEPOSITION_TYPE = ROBERT_CHASE_EPISODE.getType();
+    public static final String MEDICAL_TYPE = BEST_SIDE_MEDICAL_GROUP_EPISODE.getType();
+    public static final String MRI_TYPE = BEST_SIDE_MEDICAL_GROUP_SINGLE_EPISODE.getType();
+    public static final String LAWERNCE_KUTNER_AUTHOR = BEST_SIDE_MEDICAL_GROUP_SINGLE_EPISODE.getAuthor();
+    public static final String BUDDY_BOMBER_AUTHOR = STRONG_HEALTH_EPISODE_2.getAuthor();
+    public static final String CHRISTOPHER_JACOBSON_AUTHOR = PAIN_EXPERTS_MR_EPISODE_2.getAuthor();
+    public static final String CLAIMANT_AUTHOR = JOHN_SMITH_EPISODE.getAuthor();
 }

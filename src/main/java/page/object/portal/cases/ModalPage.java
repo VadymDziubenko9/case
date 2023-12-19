@@ -27,13 +27,15 @@ public class ModalPage extends BaseAbstractPage{
     private static final String ACTION_BUTTON = "//button[@data-action-button='%s']";
     private static final String EPISODE_CONTENT_DATE = "//div[contains(@class,'MuiBox-root') and ./span[contains(@class,'episode-content-date') and text()='%s' and text()=' %s'] and ./span[contains(@class,'episode-content-info') and text()='%s' and text()='%s']]";
 
+    private static final String EPISODE_IS_DELETED = "Episode is deleted";
+    private static final String EPISODE_IS_CREATED = "Episode is created";
+    private static final String EPISODE_IS_UPDATED = "Episode is updated";
+
     private final SelenideElement episodeAuthorInput = $x(CONTROL_INPUT.formatted("author"));
     private final SelenideElement episodeTypeInput = $x(CONTROL_INPUT.formatted("input"));
     private final SelenideElement episodeDateInput = $x(CONTROL_INPUT.formatted("date"));
     private final SelenideElement episodeTimeInput = $x(CONTROL_INPUT.formatted("time"));
     private final SelenideElement episodeNotesInput = $x("//div[contains(@class,'ql-editor') and @data-placeholder='Notes']");
-    private final SelenideElement markEpisodeAsNotParentBtn = $x(ACTION_BUTTON.formatted("markEpisodeAsNotParent"));
-    private final SelenideElement markEpisodeAsParentBtn = $x(ACTION_BUTTON.formatted("markAsAParentEpisode"));
     private final SelenideElement deleteEpisodeBtn = $x(ACTION_BUTTON.formatted("deleteEpisode"));
     private final SelenideElement selectedPreEventCheckbox = $x("//label[contains(@data-control-checkbox,'preEvent') and .//span[contains(@class,'Mui-checked')]]");
     private final SelenideElement newEpisodeForm = $x("//div[contains(@role,'dialog') and .//h2[contains(normalize-space(),'Create')]]");
@@ -84,9 +86,7 @@ public class ModalPage extends BaseAbstractPage{
         return this;
     }
 
-    @Step("Fill in episode form fields")
     public ModalPage fillInEpisodeForm(Episode episode) {
-        log.info("Filling in an episode form fields");
         fillEpisodeAuthor(episode);
         fillEpisodeType(episode);
         fillEpisodeDate(episode);
@@ -147,13 +147,13 @@ public class ModalPage extends BaseAbstractPage{
     public void saveEpisode() {
         log.info("Saving episode");
         createEpisodeBtn.shouldBe(enabled).click();
-        waitTillBubbleMessagesShown("Episode is created", "Episode is updated");
+        waitTillBubbleMessagesShown(EPISODE_IS_CREATED, EPISODE_IS_UPDATED);
         closeAllBubbles();
     }
 
     public void saveEpisodeOnEdit() {
         saveEpisodeBtn.shouldBe(enabled).click();
-        waitTillBubbleMessagesShown("Episode is created", "Episode is updated");
+        waitTillBubbleMessagesShown(EPISODE_IS_CREATED, EPISODE_IS_UPDATED);
         closeAllBubbles();
     }
 
@@ -178,7 +178,7 @@ public class ModalPage extends BaseAbstractPage{
     public void deleteAllEpisodes() {
         while (episodeListItemLoc.isDisplayed()) {
             deleteEpisodeBtn.shouldBe(enabled).click();
-            waitTillBubbleMessageShown("Episode is deleted");
+            waitTillBubbleMessageShown(EPISODE_IS_DELETED);
             closeAllBubbles();
         }
     }
@@ -201,7 +201,6 @@ public class ModalPage extends BaseAbstractPage{
 
     public ModalPage tryToFindAuthorByKeyWords(String authorName) {
         episodeAuthorInput.sendKeys(authorName);
-//        episodeAuthorInput.shouldBe(enabled).click();
         return this;
     }
 

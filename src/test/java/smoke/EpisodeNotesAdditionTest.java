@@ -28,18 +28,18 @@ public class EpisodeNotesAdditionTest extends BaseAbstractTest {
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
 
         assertThat(workspacePage.getModalViewDocumentTitle())
-                    .as("Document isn't opened or wrong one is opened")
-                    .isEqualTo(DOCUMENT_TITLE);
-            modalPage.fillEpisodeNotes(EPISODE_NOTES_13153612).saveEpisodeOnEdit();
+                .as("Document isn't opened or wrong one is opened")
+                .isEqualTo(DOCUMENT_TITLE);
+        modalPage.fillEpisodeNotes(EPISODE_NOTES_13153612).saveEpisodeOnEdit();
 
         assertThat(modalPage.parseEpisode().getNotes())
-                    .as("Episode notes don't match")
-                    .isEqualTo(EPISODE_NOTES_13153612.getNotes());
-            modalPage.closeModalView();
+                .as("Episode notes don't match")
+                .isEqualTo(EPISODE_NOTES_13153612.getNotes());
+        modalPage.closeModalView();
 
         assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
-                    .as("Notes Icon on page card doesn't appear")
-                    .isTrue();
+                .as("Notes Icon on page card doesn't appear")
+                .isTrue();
     }
 
     @Test
@@ -50,18 +50,18 @@ public class EpisodeNotesAdditionTest extends BaseAbstractTest {
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
 
         assertThat(workspacePage.getModalViewDocumentTitle())
-                    .as("Document isn't opened or wrong one is opened")
-                    .isEqualTo(DOCUMENT_TITLE);
-            modalPage.fillEpisodeNotes(BEST_SIDE_MEDICAL_GROUP_EPISODE_NOTES).saveEpisodeOnEdit();
+                .as("Document isn't opened or wrong one is opened")
+                .isEqualTo(DOCUMENT_TITLE);
+        modalPage.fillEpisodeNotes(BEST_SIDE_MEDICAL_GROUP_EPISODE_NOTES).saveEpisodeOnEdit();
 
         assertThat(modalPage.parseEpisode().getNotes())
-                    .as("Episode notes don't match")
-                    .isEqualTo(BEST_SIDE_MEDICAL_GROUP_EPISODE_NOTES.getNotes());
-            modalPage.closeModalView();
+                .as("Episode notes don't match")
+                .isEqualTo(BEST_SIDE_MEDICAL_GROUP_EPISODE_NOTES.getNotes());
+        modalPage.closeModalView();
 
         assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
-                    .as("Notes Icon on page card doesn't appear")
-                    .isTrue();
+                .as("Notes Icon on page card doesn't appear")
+                .isTrue();
     }
 
     @Test
@@ -205,18 +205,18 @@ public class EpisodeNotesAdditionTest extends BaseAbstractTest {
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
 
         assertThat(workspacePage.getModalViewDocumentTitle())
-                    .as("Document isn't opened or wrong one is opened")
-                    .isEqualTo(DOCUMENT_TITLE);
-            modalPage.fillEpisodeNotes(ROBERT_CHASE_EPISODE_NOTES).saveEpisodeOnEdit();
+                .as("Document isn't opened or wrong one is opened")
+                .isEqualTo(DOCUMENT_TITLE);
+        modalPage.fillEpisodeNotes(ROBERT_CHASE_EPISODE_NOTES).saveEpisodeOnEdit();
 
         assertThat(modalPage.parseEpisode().getNotes())
-                    .as("Episode notes don't match")
-                    .isEqualTo(ROBERT_CHASE_EPISODE_NOTES.getNotes());
-            modalPage.closeModalView();
+                .as("Episode notes don't match")
+                .isEqualTo(ROBERT_CHASE_EPISODE_NOTES.getNotes());
+        modalPage.closeModalView();
 
         assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
-                    .as("Notes Icon on page card doesn't appear")
-                    .isTrue();
+                .as("Notes Icon on page card doesn't appear")
+                .isTrue();
     }
 
     @Test
@@ -287,18 +287,18 @@ public class EpisodeNotesAdditionTest extends BaseAbstractTest {
         openPageInWorkspace(DOCUMENT_TITLE, MAIN_STAPLE_PAGE);
 
         assertThat(workspacePage.getModalViewDocumentTitle())
-                    .as("Document isn't opened or wrong one is opened")
-                    .isEqualTo(DOCUMENT_TITLE);
-            modalPage.fillEpisodeNotes(JOHN_SMITH_EPISODE_NOTES).saveEpisodeOnEdit();
+                .as("Document isn't opened or wrong one is opened")
+                .isEqualTo(DOCUMENT_TITLE);
+        modalPage.fillEpisodeNotes(JOHN_SMITH_EPISODE_NOTES).saveEpisodeOnEdit();
 
         assertThat(modalPage.parseEpisode().getNotes())
-                    .as("Episode notes don't match")
-                    .isEqualTo(JOHN_SMITH_EPISODE_NOTES.getNotes());
-            modalPage.closeModalView();
+                .as("Episode notes don't match")
+                .isEqualTo(JOHN_SMITH_EPISODE_NOTES.getNotes());
+        modalPage.closeModalView();
 
         assertThat(workspacePage.isNotesIconAppearedOnPageCard(DOCUMENT_TITLE, MAIN_STAPLE_PAGE))
-                    .as("Notes Icon on page card doesn't appear")
-                    .isTrue();
+                .as("Notes Icon on page card doesn't appear")
+                .isTrue();
     }
 
     @Step("Open page in Workspace view")
@@ -307,6 +307,6 @@ public class EpisodeNotesAdditionTest extends BaseAbstractTest {
                 .openHomePage()
                 .openCase(COPIED_CASE_NAME)
                 .openWorkspace()
-                .openPageCardInWorkspace(documentTitle, pageNumber);
+                .openPageInWorkspace(documentTitle, pageNumber);
     }
 }

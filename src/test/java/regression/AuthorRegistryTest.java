@@ -35,7 +35,7 @@ public class AuthorRegistryTest extends BaseAbstractTest {
         deleteAuthorFromRegistry(AUTHOR_NAME);
     }
 
-    @Test(priority = 1, groups = "debug")
+    @Test(priority = 1, groups = "authorRegistry")
     public void verifyIfAuthorRegistryPageIsEnabled() {
         homePage.openHomePage().openAuthorRegistry().markAuthorVerified(AUTHOR_NAME);
 
@@ -164,7 +164,7 @@ public class AuthorRegistryTest extends BaseAbstractTest {
 
     @Step("Create page episode on {1} page in {0} document")
     private void createEpisode(String documentTitle, int number) {
-        log.info("Create {1} episode on {2} page number and for {0} document");
+        log.info("Create episode on {} page number and for {} document", number, documentTitle);
         homePage
                 .openHomePage()
                 .openCase(COPIED_CASE_NAME)

@@ -3,7 +3,6 @@ package page.object.portal.cases;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import lombok.extern.slf4j.Slf4j;
-import utils.JsUtil;
 
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
@@ -11,6 +10,7 @@ import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static utils.Config.BASE_URL;
+import static utils.JsUtil.waitForDomToLoad;
 
 @Slf4j
 public class LoginPage extends BaseAbstractPage{
@@ -25,11 +25,11 @@ public class LoginPage extends BaseAbstractPage{
     public HomePage login(String email, String password) {
         log.info("User logging with\n email: {} \n password: {} ", email, password);
         open(BASE_URL);
-        JsUtil.waitForDomToLoad();
+        waitForDomToLoad();
         emailLoc.sendKeys(email);
         passwordLoc.sendKeys(password);
         logInButton.shouldBe(enabled).click();
-        JsUtil.waitForDomToLoad();
+        waitForDomToLoad();
         return new HomePage().verifyIsUserLoadedIn();
     }
 

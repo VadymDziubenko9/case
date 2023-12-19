@@ -16,6 +16,10 @@ public class AuthorRegistryPage {
     private final SelenideElement searchInput = $x("//input[@name='search']");
     private final String DROP_DOWN_CONTEXT_MENU_BTN = "//button[contains(@data-action-button,'authorDropdow')]";
     private final String DROP_DOWN_CONTEXT_MENU_LIST = "//ul/li[contains(@data-action-menu-item,'%s')]";
+
+    private final String EPISODE_AUTHOR_IS_UPDATED = "Episode author is updated";
+    private final String EPISODE_AUTHOR_IS_DELETED = "Episode author is deleted";
+
     private final SelenideElement authorElementLoc = $x("//ul/li[contains(@class,'MuiListItem-root')]");
     private final SelenideElement noAuthorsFoundLoc = $x("//div[contains(@class,'MuiBox-root') and ./p[text()='No author(s)']]");
 
@@ -34,7 +38,7 @@ public class AuthorRegistryPage {
     public AuthorRegistryPage markAuthorVerified(String authorName) {
         expandAuthorContextMenu(authorName);
         $x(DROP_DOWN_CONTEXT_MENU_LIST.formatted("markVerifiedAuthor")).click();
-        waitTillBubbleMessageShown("Episode author is updated");
+        waitTillBubbleMessageShown(EPISODE_AUTHOR_IS_UPDATED);
         closeAllBubbles();
         return this;
     }
@@ -51,7 +55,7 @@ public class AuthorRegistryPage {
         searchAuthor(name);
         expandAuthorContextMenu(name);
         $x(DROP_DOWN_CONTEXT_MENU_LIST.formatted("deleteAuthor")).click();
-        waitTillBubbleMessageShown("Episode author is deleted");
+        waitTillBubbleMessageShown(EPISODE_AUTHOR_IS_DELETED);
         closeAllBubbles();
     }
 

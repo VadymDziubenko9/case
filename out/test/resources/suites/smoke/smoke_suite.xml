@@ -5,7 +5,7 @@
         <listener class-name="listeners.AttachmentListener"/>
     </listeners>
 
-    <test name="Regression test">
+    <test name="Smoke tests">
         <classes>
             <class name="smoke.LoginTest"/>
             <class name="smoke.CaseDuplicateTest"/>

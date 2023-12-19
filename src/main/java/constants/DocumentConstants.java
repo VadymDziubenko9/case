@@ -38,4 +38,57 @@ public class DocumentConstants {
     public static List<String> getDocumentsListOfTitles() {
         return getExpectedDocumentsList().stream().map(Document::getTitle).toList();
     }
+
+    public static List<String> getListOfExpectedFilteredDocumentsByMultipleTypes() {
+        return List.of(BESTSIDE_MEDICAL_GROUP_PDF.getTitle(),
+                BESTSIDE_MEDICAL_GROUP_PDF.getTitle(),
+                INTERVENTIONAL_PAIN_EXPERTS_MR_PDF.getTitle(),
+                CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(),
+                DOCUMENT_13153612_PDF.getTitle(),
+                JOHN_SMITH_V_2_PDF.getTitle(),
+                ROBERT_CHASE_PDF.getTitle());
+    }
+
+    public static List<String> getListOfExpectedFilteredDocumentsBySingleType() {
+        return List.of(DOCUMENT_13153612_PDF.getTitle(), JOHN_SMITH_V_2_PDF.getTitle(), ROBERT_CHASE_PDF.getTitle());
+    }
+
+    public static List<String> getListOfExpectedFilteredDocumentsByMultipleTags() {
+        return List.of(DOCUMENT_13153612_PDF.getTitle(), JOHN_SMITH_V_2_PDF.getTitle(), CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(),
+                ROBERT_CHASE_PDF.getTitle());
+    }
+
+    public static List<String> getListOfExpectedFilteredDocumentsBySingleAuthor() {
+        return List.of(BESTSIDE_MEDICAL_GROUP_PDF.getTitle(), CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle());
+    }
+
+    public static List<String> getListOfExpectedFilteredDocumentsByMultipleAuthors() {
+        return List.of(STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(),
+                SMITH_DEMO_FISHING_PDF.getTitle(),
+                CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(),
+                DOCUMENT_13153612_PDF.getTitle(),
+                INTERVENTIONAL_PAIN_EXPERTS_MR_PDF.getTitle(),
+                JOHN_SMITH_V_2_PDF.getTitle());
+    }
+
+    public static List<String> getListOfExpectedFilteredDocumentsBySingleColor() {
+        return List.of(STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(),
+                STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(),
+                STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(),
+                BESTSIDE_MEDICAL_GROUP_PDF.getTitle(),
+                SMITH_DEMO_FISHING_PDF.getTitle(),
+                CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(),
+                CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle());
+    }
+
+    public static List<String> getListOfExpectedFilteredDocumentsByMultipleColors() {
+        return List.of(STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(),
+                STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(),
+                STRONG_HEALTH_CARROLLWOOD_PDF.getTitle(),
+                BESTSIDE_MEDICAL_GROUP_PDF.getTitle(),
+                SMITH_DEMO_FISHING_PDF.getTitle(),
+                CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(),
+                CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle(),
+                CENTRAL_BAY_MEDICAL_AND_REHAB_CENTER_PDF.getTitle());
+    }
 }

@@ -29,10 +29,7 @@ public class CaseDuplicateTest extends BaseAbstractTest {
     @Test
     @Description("Verify case duplication for an existing case")
     public void verifyCaseDuplicate() {
-        var parsedDocuments = homePage
-                .openHomePage()
-                .openCase("John Smith")
-                .getParsedDocuments();
+        var parsedDocuments = homePage.openHomePage().openCase("John Smith").getParsedDocuments();
         homePage.openDuplicateAction();
 
         SoftAssertions.assertSoftly(softAssertions -> {
