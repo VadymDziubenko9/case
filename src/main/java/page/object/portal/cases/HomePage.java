@@ -7,6 +7,7 @@ import dto.Document;
 import io.qameta.allure.Step;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matchers;
 import org.openqa.selenium.Keys;
 
 import java.time.Duration;
@@ -16,6 +17,8 @@ import java.util.stream.IntStream;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static enums.ProcessingStatus.READY;
+import static org.openqa.selenium.interactions.WheelInput.ScrollOrigin.fromElement;
+import static utils.AwaitUtil.awaitSafe;
 import static utils.Config.BASE_URL;
 import static utils.JsUtil.waitForDomToLoad;
 
@@ -26,7 +29,6 @@ public class HomePage extends BaseAbstractPage {
     private static final String PAGE_LOC_BY_NUMBER = "//div[contains(@class,'card-page-wrapper')]/div[@data-document-page-number='%d']";
     private static final String ADD_PARTICULAR_PAGE_TO_STAPLE = "//button[.//i[contains(@class,'icon-add')]]";
     private static final String PARTICULAR_PAGE_IN_STAPLE = "//button[.//i[contains(@class,'icon-done')]]";
-    private static final String GO_TO_INPUT_LOC = "//form[.//div[@aria-label='Go to input']]";
     private static final String DROP_DOWN_LIST_VALUE_LOC = "//ul/li[contains(@name,'%s')]";
     private static final String FIRST_PAGE_IN_STAPLE_BY_PAGE_NUM = "//div[contains(@class,'card-page-wrapper')]/div[@data-document-page-number='%d' and @data-page-staple-order='1']";
     private static final String CASE_CONTAINER_LOC = "//div[contains(@class,'MuiPaper-root') and .//a[contains(text(),'%s')]]";
@@ -48,8 +50,6 @@ public class HomePage extends BaseAbstractPage {
     private final SelenideElement archivedCaseTabLoc = $x(ACTIVE_CASES_TAB_LOC.formatted("archived"));
     private final SelenideElement deleteCaseDialogLoc = $x("//div[contains(@role, 'dialog') and .//*[normalize-space()='Are you absolutely sure ?']]");
     private final SelenideElement submitCaseDeleteBtn = $x("//button[@data-action-button='submitDeleteCaseDialog']");
-    private final SelenideElement goToPageInput = $x(GO_TO_INPUT_LOC + "//input");
-    private final SelenideElement goToPageBtn = $x(GO_TO_INPUT_LOC + "//button[contains(text(),'Go to page')]");
     private final SelenideElement searchInput = $x("//div[@data-control-input='search']//input");
     private final SelenideElement caseContextMenuList = $x("//ul[contains(@class,'MuiList-root') and @role='menu']");
     private final SelenideElement caseDuplicateDialog = $x("//form[contains(@role,'dialog') and .//text()='Create case duplicate']");
@@ -68,7 +68,7 @@ public class HomePage extends BaseAbstractPage {
     private final ElementsCollection caseDocumentsTitles = $$x("//ul[contains(@class,'MuiList-root')]//*[contains(@data-scroll-id,'document')]");
     private final ElementsCollection documentsList = $$x("//ul[contains(@class,'MuiList-root')]/li");
     private final ElementsCollection stapledIcon = $$x("//i[contains(@class, 'icon-stapled')]");
-    private final ElementsCollection pageCardsLoc = $$x("//div[contains(@class,'card-page-container')]//div[contains(@class,'card-page-wrapper')]");
+    private final ElementsCollection pageCardCollection = $$x("//div[contains(@class,'card-page-container')]");
 
     private static void addPagesToStaple(int startIndex, int endIndex) {
         log.info("Adding to the staple pages from {} to {}", startIndex, endIndex);
@@ -186,19 +186,17 @@ public class HomePage extends BaseAbstractPage {
         $x(SELECTED_CASE_TAB_LOC.formatted(tabName)).shouldBe(appear, visible);
     }
 
-    private void scrollToParticularPage(int mainPage) {
-        log.info("Screen is moving to the page: {}", mainPage);
-        goToPage(mainPage);
-        while (!$x(PAGE_LOC_BY_NUMBER.formatted(mainPage)).isDisplayed()) {
-            actions().scrollToElement(pageCardsLoc.get(mainPage)).scrollByAmount(0, 333);
-            waitUntilPageCardIsLoading();
+    private void scrollToParticularPage(int pageNumber) {
+        log.info("Screen is moving to the page: {}", pageNumber);
+        var index = 0;
+        while (!$x(PAGE_LOC_BY_NUMBER.formatted(pageNumber)).isDisplayed()) {
+            int finalIndex = index;
+            awaitSafe(Duration.ofSeconds(3), Duration.ofMillis(50),
+                    () -> pageCardCollection.get(finalIndex), Matchers.is(visible));
+            actions().scrollFromOrigin(fromElement(pageCardCollection.get(index)), 0, 222).perform();
+            index++;
         }
-    }
-
-    private void goToPage(int mainPage) {
-        clearInput(goToPageInput);
-        goToPageInput.shouldBe(exist).sendKeys(String.valueOf(mainPage));
-        goToPageBtn.shouldBe(enabled).click();
+        $x(PAGE_LOC_BY_NUMBER.formatted(pageNumber)).scrollIntoView(false).shouldBe(visible);
     }
 
     @Step("Staple pages from {0} to {1}")
@@ -278,13 +276,6 @@ public class HomePage extends BaseAbstractPage {
     public boolean isCaseShown(String caseName) {
         waitForDomToLoad();
         return $x(CASE_CONTAINER_LOC.formatted(caseName)).is(visible);
-    }
-
-    private void waitUntilPageCardIsLoading() {
-        while (!pageCardImageLocator.shouldHave(CollectionCondition.sizeGreaterThan(0)).last().isDisplayed()) {
-            sleep(200);
-        }
-        pageCardImageLocator.last().shouldBe(visible, exist);
     }
 
     public AuthorRegistryPage openAuthorRegistry() {

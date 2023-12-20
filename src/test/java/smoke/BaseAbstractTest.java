@@ -3,11 +3,16 @@ package smoke;
 import com.codeborne.selenide.Selenide;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import page.object.portal.cases.HomePage;
+import page.object.portal.cases.LoginPage;
 import page.object.portal.cases.ModalPage;
 import page.object.portal.cases.WorkspacePage;
 import utils.WebDriverUtil;
+
+import static utils.Config.USER_NAME;
+import static utils.Config.USER_PASSWORD;
 
 @Slf4j
 public abstract class BaseAbstractTest {
@@ -23,14 +28,14 @@ public abstract class BaseAbstractTest {
         WebDriverUtil.initDriver();
     }
 
-//    @AfterSuite(alwaysRun = true)
-//    public void deleteCase() {
-//        new LoginPage().login(USER_NAME, USER_PASSWORD);
-//        homePage
-//                .archiveCase(COPIED_CASE_NAME)
-//                .openArchivedTab()
-//                .deleteCase(COPIED_CASE_NAME);
-//    }
+    @AfterSuite(alwaysRun = true)
+    public void deleteCase() {
+        new LoginPage().login(USER_NAME, USER_PASSWORD);
+        homePage
+                .archiveCase(COPIED_CASE_NAME)
+                .openArchivedTab()
+                .deleteCase(COPIED_CASE_NAME);
+    }
 
     @AfterClass(alwaysRun = true)
     public void closeWebDriver() {

@@ -10,8 +10,6 @@ import static utils.WebDriverUtil.getOperatingSystem;
 
 @Slf4j
 public abstract class BaseAbstractPage {
-    private static final String CONFIRMATION_DIALOG = "//div[contains(@class, 'MuiPaper-root') and .//*[normalize-space()='%s']]";
-
     private static final SelenideElement snackBarDialog = $x("//div[@class='SnackbarItem-message']");
     private static final SelenideElement snackBarCloseBtn = $x("//button[@data-action-button='closeSnackbar' or @data-action-button='closeNotification']");
 
@@ -39,11 +37,6 @@ public abstract class BaseAbstractPage {
         } catch (Exception exception) {
             log.error(snackBarDialog.getText());
         }
-    }
-
-    public static void confirmAction(String message) {
-        $x(CONFIRMATION_DIALOG.formatted(message)).shouldBe(visible);
-        $x(CONFIRMATION_DIALOG.formatted(message) + "//button[normalize-space()='Confirm']").shouldBe(visible).click();
     }
 
     public void clearInput(SelenideElement locator) {

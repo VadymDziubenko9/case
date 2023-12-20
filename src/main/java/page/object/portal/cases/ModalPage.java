@@ -22,7 +22,6 @@ import static utils.WebDriverUtil.getOperatingSystem;
 @AllArgsConstructor
 @Slf4j
 public class ModalPage extends BaseAbstractPage{
-
     private static final String CONTROL_INPUT = "//div[@data-control-input='%s']//input";
     private static final String ACTION_BUTTON = "//button[@data-action-button='%s']";
     private static final String EPISODE_CONTENT_DATE = "//div[contains(@class,'MuiBox-root') and ./span[contains(@class,'episode-content-date') and text()='%s' and text()=' %s'] and ./span[contains(@class,'episode-content-info') and text()='%s' and text()='%s']]";
